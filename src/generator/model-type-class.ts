@@ -19,7 +19,7 @@ import {
 import { modelsFolderName } from "./config";
 import { DMMF } from "./dmmf/types";
 import { DmmfDocument } from "./dmmf/dmmf-document";
-import { convertNewLines } from "./helpers";
+import { convertNewLines, getCustomScalarImportNames } from "./helpers";
 
 export default function generateObjectTypeClassFromModel(
   project: Project,
@@ -37,7 +37,11 @@ export default function generateObjectTypeClassFromModel(
   generateTypeGraphQLImport(sourceFile);
   generateGraphQLScalarsImport(sourceFile);
   generatePrismaNamespaceImport(sourceFile, dmmfDocument.options, 1);
-  generateCustomScalarsImport(sourceFile, 1);
+  generateCustomScalarsImport(
+    sourceFile,
+    1,
+    getCustomScalarImportNames(model.fields),
+  );
   generateModelsImports(
     sourceFile,
     model.fields

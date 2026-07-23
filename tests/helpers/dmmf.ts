@@ -10,10 +10,10 @@ export default async function getPrismaClientDmmfFromPrismaSchema(
   const datamodelWithGeneratorBlock = /* prisma */ `
     datasource db {
       provider = "${provider}"
-      url      = env("DATABASE_URL")
     }
     generator client {
-      provider = "prisma-client-js"
+      provider = "prisma-client"
+      output   = "./generated/prisma"
       ${
         previewFeaturesToEmit.length > 0
           ? `previewFeatures = [${previewFeaturesToEmit
@@ -26,6 +26,5 @@ export default async function getPrismaClientDmmfFromPrismaSchema(
   `;
   return await getDMMF({
     datamodel: datamodelWithGeneratorBlock,
-    previewFeatures,
   });
 }

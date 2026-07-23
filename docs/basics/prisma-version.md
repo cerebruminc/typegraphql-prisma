@@ -8,12 +8,12 @@ sidebar_position: 4
 
 `@cerebruminc/typegraphql-prisma` works only with selected versions of Prisma.
 By default, it checks if the installed Prisma version matches the required one using semver rules.
-So when you try to use other version, like a just published, new minor release (or the `dev` one), you will receive an error about wrong package version, e.g:
+When you try to use another version, such as a newly published major release (or a `dev` build), you will receive an error about the package version, for example:
 
 ```sh
-Error: Looks like an incorrect version "3.1.1" of the Prisma packages has been installed.
+Error: Looks like an incorrect version "8.0.0" of the Prisma packages has been installed.
 '@cerebruminc/typegraphql-prisma' works only with selected versions, so please ensure
-that you have installed a version of Prisma that meets the requirement: "~3.0.1".
+that you have installed a version of Prisma that meets the requirement: "^7.8.0".
 Find out more about that requirement in docs:
 https://cerebruminc.github.io/typegraphql-prisma/docs/basics/prisma-version
 ```
