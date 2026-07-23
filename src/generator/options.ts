@@ -1,5 +1,7 @@
 import { EmitBlockKind } from "./emit-block";
 
+export type PrismaClientProvider = "prisma-client" | "prisma-client-js";
+
 export interface ExternalGeneratorOptions {
   emitDMMF?: boolean;
   emitTranspiledCode?: boolean;
@@ -21,6 +23,7 @@ export interface ExternalGeneratorOptions {
 export interface InternalGeneratorOptions {
   outputDirPath: string;
   prismaClientPath: string;
+  prismaClientProvider?: PrismaClientProvider;
 }
 
 export interface GeneratorOptions

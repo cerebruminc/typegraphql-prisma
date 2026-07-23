@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import path from "path";
 
 import generateArtifactsDirPath from "../helpers/artifacts-dir";
 import { generateCodeFromSchema } from "../helpers/generate-code";
@@ -374,6 +375,29 @@ describe("models", () => {
       );
 
       expect(firstModelTSFile).toMatchSnapshot("SampleModel");
+    });
+  });
+
+  describe("when using the prisma-client generator", () => {
+    it("should import Prisma from the generated client entrypoint", async () => {
+      const schema = /* prisma */ `
+        model SampleModel {
+          intIdField Int @id @default(autoincrement())
+        }
+      `;
+
+      await generateCodeFromSchema(schema, {
+        outputDirPath,
+        prismaClientProvider: "prisma-client",
+        prismaClientPath: path.resolve(outputDirPath, "../prisma-client"),
+      });
+      const sampleModelTSFile = await readGeneratedFile(
+        "/models/SampleModel.ts",
+      );
+
+      expect(sampleModelTSFile).toContain(
+        'import { Prisma } from "../../prisma-client/client";',
+      );
     });
   });
 

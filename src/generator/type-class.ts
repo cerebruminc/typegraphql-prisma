@@ -24,7 +24,7 @@ import {
 import { DmmfDocument } from "./dmmf/dmmf-document";
 import { DMMF } from "./dmmf/types";
 import { GeneratorOptions } from "./options";
-import { pascalCase } from "./helpers";
+import { getCustomScalarImportNames, pascalCase } from "./helpers";
 
 export function generateOutputTypeClassFromType(
   project: Project,
@@ -51,7 +51,11 @@ export function generateOutputTypeClassFromType(
   generateTypeGraphQLImport(sourceFile);
   generateGraphQLScalarsImport(sourceFile);
   generatePrismaNamespaceImport(sourceFile, dmmfDocument.options, 2);
-  generateCustomScalarsImport(sourceFile, 2);
+  generateCustomScalarsImport(
+    sourceFile,
+    2,
+    getCustomScalarImportNames(type.fields.map(field => field.outputType)),
+  );
   generateArgsImports(sourceFile, fieldArgsTypeNames, 0);
   generateOutputsImports(
     sourceFile,
@@ -176,7 +180,13 @@ export function generateInputTypeClassFromType(
   generateTypeGraphQLImport(sourceFile);
   generateGraphQLScalarsImport(sourceFile);
   generatePrismaNamespaceImport(sourceFile, options, 2);
-  generateCustomScalarsImport(sourceFile, 2);
+  generateCustomScalarsImport(
+    sourceFile,
+    2,
+    getCustomScalarImportNames(
+      inputType.fields.map(field => field.selectedInputType),
+    ),
+  );
   generateInputsImports(
     sourceFile,
     inputType.fields

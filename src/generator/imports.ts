@@ -52,29 +52,47 @@ export function generateGraphQLScalarsImport(sourceFile: SourceFile) {
 export function generateGraphQLScalarTypeImport(sourceFile: SourceFile) {
   sourceFile.addImportDeclaration({
     moduleSpecifier: "graphql",
-    namedImports: ["GraphQLScalarType"],
+    namedImports: ["GraphQLScalarType", "Kind"],
   });
 }
 
-export function generateCustomScalarsImport(sourceFile: SourceFile, level = 0) {
+export function generateCustomScalarsImport(
+  sourceFile: SourceFile,
+  level = 0,
+  namedImports: string[] = [],
+) {
+  if (namedImports.length === 0) {
+    return;
+  }
+
   sourceFile.addImportDeclaration({
     moduleSpecifier:
       (level === 0 ? "./" : "") +
       path.posix.join(...Array(level).fill(".."), "scalars"),
-    namedImports: ["DecimalJSScalar"],
+    namedImports,
   });
 }
 
-export function generateHelpersFileImport(sourceFile: SourceFile, level = 0) {
+export type HelpersFileImportName =
+  | "transformInfoIntoPrismaArgs"
+  | "transformInfoIntoPrismaSelect"
+  | "getPrismaFromContext"
+  | "transformCountFieldIntoSelectRelationsCount";
+
+export function generateHelpersFileImport(
+  sourceFile: SourceFile,
+  level = 0,
+  namedImports: HelpersFileImportName[] = [
+    "transformInfoIntoPrismaArgs",
+    "getPrismaFromContext",
+    "transformCountFieldIntoSelectRelationsCount",
+  ],
+) {
   sourceFile.addImportDeclaration({
     moduleSpecifier:
       (level === 0 ? "./" : "") +
       path.posix.join(...Array(level).fill(".."), "helpers"),
-    namedImports: [
-      "transformInfoIntoPrismaArgs",
-      "getPrismaFromContext",
-      "transformCountFieldIntoSelectRelationsCount",
-    ],
+    namedImports,
   });
 }
 

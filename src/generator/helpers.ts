@@ -84,11 +84,36 @@ export function mapScalarToTSType(scalar: string, isInputType: boolean) {
       return "Prisma.Decimal";
     }
     case PrismaScalars.Bytes: {
-      return "Buffer";
+      return "Uint8Array";
     }
     default:
       throw new Error(`Unrecognized scalar type: ${scalar}`);
   }
+}
+
+function isPrismaBytesType(typeInfo: DMMF.TypeInfo): boolean {
+  return (
+    typeInfo.location === "scalar" && typeInfo.type === PrismaScalars.Bytes
+  );
+}
+
+function isPrismaDecimalType(typeInfo: DMMF.TypeInfo): boolean {
+  return (
+    typeInfo.location === "scalar" && typeInfo.type === PrismaScalars.Decimal
+  );
+}
+
+export function getCustomScalarImportNames(
+  typeInfos: readonly DMMF.TypeInfo[],
+): string[] {
+  const customScalarImportNames: string[] = [];
+  if (typeInfos.some(isPrismaDecimalType)) {
+    customScalarImportNames.push("DecimalJSScalar");
+  }
+  if (typeInfos.some(isPrismaBytesType)) {
+    customScalarImportNames.push("ByteScalar");
+  }
+  return customScalarImportNames;
 }
 
 export function getTypeGraphQLType(
@@ -149,7 +174,7 @@ export function mapScalarToTypeGraphQLType(
       return "DecimalJSScalar";
     }
     case PrismaScalars.Bytes: {
-      return "GraphQLScalars.ByteResolver";
+      return "ByteScalar";
     }
     default: {
       throw new Error(`Unrecognized scalar type: ${scalar}`);
@@ -180,6 +205,7 @@ function getInputKeywordPhrasePosition(inputTypeName: string) {
     "ScalarWhere",
     "Where",
     "ListRelationFilter",
+    "ScalarRelationFilter",
     "RelationFilter",
     "Filter",
   ]

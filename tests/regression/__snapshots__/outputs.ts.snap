@@ -4,7 +4,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { ExampleAvgAggregate } from \\"../outputs/ExampleAvgAggregate\\";
 import { ExampleCountAggregate } from \\"../outputs/ExampleCountAggregate\\";
 import { ExampleMaxAggregate } from \\"../outputs/ExampleMaxAggregate\\";
@@ -45,7 +44,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"CreateManyAndReturnExample\\", {})
 export class CreateManyAndReturnExample {
@@ -81,7 +79,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleAvgAggregate\\", {})
 export class ExampleAvgAggregate {
@@ -102,7 +99,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleCountAggregate\\", {})
 export class ExampleCountAggregate {
@@ -143,7 +139,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleMaxAggregate\\", {})
 export class ExampleMaxAggregate {
@@ -179,7 +174,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleMinAggregate\\", {})
 export class ExampleMinAggregate {
@@ -215,7 +209,6 @@ exports[`outputs should properly generate aggregate classes for model with lower
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleSumAggregate\\", {})
 export class ExampleSumAggregate {
@@ -242,6 +235,7 @@ export { ExampleGroupBy } from \\"./ExampleGroupBy\\";
 export { ExampleMaxAggregate } from \\"./ExampleMaxAggregate\\";
 export { ExampleMinAggregate } from \\"./ExampleMinAggregate\\";
 export { ExampleSumAggregate } from \\"./ExampleSumAggregate\\";
+export { UpdateManyAndReturnExample } from \\"./UpdateManyAndReturnExample\\";
 "
 `;
 
@@ -249,7 +243,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: A
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { ExampleAvgAggregate } from \\"../outputs/ExampleAvgAggregate\\";
 import { ExampleCountAggregate } from \\"../outputs/ExampleCountAggregate\\";
 import { ExampleMaxAggregate } from \\"../outputs/ExampleMaxAggregate\\";
@@ -290,7 +283,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: C
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"CreateManyAndReturnExample\\", {})
 export class CreateManyAndReturnExample {
@@ -326,7 +318,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: E
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleAvgAggregate\\", {})
 export class ExampleAvgAggregate {
@@ -347,7 +338,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: E
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleCountAggregate\\", {})
 export class ExampleCountAggregate {
@@ -388,7 +378,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: E
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleMaxAggregate\\", {})
 export class ExampleMaxAggregate {
@@ -424,7 +413,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: E
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleMinAggregate\\", {})
 export class ExampleMinAggregate {
@@ -460,7 +448,6 @@ exports[`outputs should properly generate aggregate classes for renamed model: E
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"ExampleSumAggregate\\", {})
 export class ExampleSumAggregate {
@@ -487,6 +474,7 @@ export { ExampleGroupBy } from \\"./ExampleGroupBy\\";
 export { ExampleMaxAggregate } from \\"./ExampleMaxAggregate\\";
 export { ExampleMinAggregate } from \\"./ExampleMinAggregate\\";
 export { ExampleSumAggregate } from \\"./ExampleSumAggregate\\";
+export { UpdateManyAndReturnExample } from \\"./UpdateManyAndReturnExample\\";
 "
 `;
 
@@ -494,7 +482,6 @@ exports[`outputs should properly generate count classes for relation fields with
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { FirstModelCountSecondModelsFieldArgs } from \\"./args/FirstModelCountSecondModelsFieldArgs\\";
 
 @TypeGraphQL.ObjectType(\\"FirstModelCount\\", {})
@@ -531,6 +518,8 @@ export { SecondModelGroupBy } from \\"./SecondModelGroupBy\\";
 export { SecondModelMaxAggregate } from \\"./SecondModelMaxAggregate\\";
 export { SecondModelMinAggregate } from \\"./SecondModelMinAggregate\\";
 export { SecondModelSumAggregate } from \\"./SecondModelSumAggregate\\";
+export { UpdateManyAndReturnFirstModel } from \\"./UpdateManyAndReturnFirstModel\\";
+export { UpdateManyAndReturnSecondModel } from \\"./UpdateManyAndReturnSecondModel\\";
 export * from \\"./args\\";
 "
 `;
@@ -539,7 +528,6 @@ exports[`outputs should properly generate count classes for relation fields: Fir
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { FirstModelCountSecondModelsFieldArgs } from \\"./args/FirstModelCountSecondModelsFieldArgs\\";
 
 @TypeGraphQL.ObjectType(\\"FirstModelCount\\", {})
@@ -576,6 +564,8 @@ export { SecondModelGroupBy } from \\"./SecondModelGroupBy\\";
 export { SecondModelMaxAggregate } from \\"./SecondModelMaxAggregate\\";
 export { SecondModelMinAggregate } from \\"./SecondModelMinAggregate\\";
 export { SecondModelSumAggregate } from \\"./SecondModelSumAggregate\\";
+export { UpdateManyAndReturnFirstModel } from \\"./UpdateManyAndReturnFirstModel\\";
+export { UpdateManyAndReturnSecondModel } from \\"./UpdateManyAndReturnSecondModel\\";
 export * from \\"./args\\";
 "
 `;
@@ -584,7 +574,6 @@ exports[`outputs should properly generate output type classes: AffectedRowsOutpu
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"AffectedRowsOutput\\", {})
 export class AffectedRowsOutput {
@@ -600,7 +589,6 @@ exports[`outputs should properly generate output type classes: AggregateSample 1
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { SampleAvgAggregate } from \\"../outputs/SampleAvgAggregate\\";
 import { SampleCountAggregate } from \\"../outputs/SampleCountAggregate\\";
 import { SampleMaxAggregate } from \\"../outputs/SampleMaxAggregate\\";
@@ -641,7 +629,6 @@ exports[`outputs should properly generate output type classes: CreateManyAndRetu
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"CreateManyAndReturnSample\\", {})
 export class CreateManyAndReturnSample {
@@ -682,7 +669,6 @@ exports[`outputs should properly generate output type classes: SampleAvgAggregat
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleAvgAggregate\\", {})
 export class SampleAvgAggregate {
@@ -708,7 +694,6 @@ exports[`outputs should properly generate output type classes: SampleCountAggreg
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleCountAggregate\\", {})
 export class SampleCountAggregate {
@@ -754,7 +739,6 @@ exports[`outputs should properly generate output type classes: SampleGroupBy 1`]
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { SampleAvgAggregate } from \\"../outputs/SampleAvgAggregate\\";
 import { SampleCountAggregate } from \\"../outputs/SampleCountAggregate\\";
 import { SampleMaxAggregate } from \\"../outputs/SampleMaxAggregate\\";
@@ -825,7 +809,6 @@ exports[`outputs should properly generate output type classes: SampleMaxAggregat
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleMaxAggregate\\", {})
 export class SampleMaxAggregate {
@@ -861,7 +844,6 @@ exports[`outputs should properly generate output type classes: SampleMinAggregat
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleMinAggregate\\", {})
 export class SampleMinAggregate {
@@ -897,7 +879,6 @@ exports[`outputs should properly generate output type classes: SampleSumAggregat
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleSumAggregate\\", {})
 export class SampleSumAggregate {
@@ -929,6 +910,7 @@ export { SampleGroupBy } from \\"./SampleGroupBy\\";
 export { SampleMaxAggregate } from \\"./SampleMaxAggregate\\";
 export { SampleMinAggregate } from \\"./SampleMinAggregate\\";
 export { SampleSumAggregate } from \\"./SampleSumAggregate\\";
+export { UpdateManyAndReturnSample } from \\"./UpdateManyAndReturnSample\\";
 "
 `;
 
@@ -936,7 +918,6 @@ exports[`outputs when \`emitIsAbstract\` generator option is enabled should prop
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { FirstModelCountSecondModelsFieldArgs } from \\"./args/FirstModelCountSecondModelsFieldArgs\\";
 
 @TypeGraphQL.ObjectType(\\"FirstModelCount\\", {
@@ -960,7 +941,6 @@ exports[`outputs when customPrismaImportPath option is set should properly gener
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../test/import\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { SampleAvgAggregate } from \\"../outputs/SampleAvgAggregate\\";
 import { SampleCountAggregate } from \\"../outputs/SampleCountAggregate\\";
 import { SampleMaxAggregate } from \\"../outputs/SampleMaxAggregate\\";
@@ -1001,7 +981,6 @@ exports[`outputs when simpleResolvers option is enabled should properly generate
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"AffectedRowsOutput\\", {
   simpleResolvers: true
@@ -1019,7 +998,6 @@ exports[`outputs when simpleResolvers option is enabled should properly generate
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 import { SampleAvgAggregate } from \\"../outputs/SampleAvgAggregate\\";
 import { SampleCountAggregate } from \\"../outputs/SampleCountAggregate\\";
 import { SampleMaxAggregate } from \\"../outputs/SampleMaxAggregate\\";
@@ -1062,7 +1040,6 @@ exports[`outputs when simpleResolvers option is enabled should properly generate
 "import * as TypeGraphQL from \\"type-graphql\\";
 import * as GraphQLScalars from \\"graphql-scalars\\";
 import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
-import { DecimalJSScalar } from \\"../../scalars\\";
 
 @TypeGraphQL.ObjectType(\\"SampleAvgAggregate\\", {
   simpleResolvers: true

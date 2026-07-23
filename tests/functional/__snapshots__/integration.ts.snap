@@ -26,6 +26,26 @@ type AggregateUser {
   _sum: UserSumAggregate
 }
 
+\\"\\"\\"GraphQL Scalar representing the Prisma Bytes type as a base64 string.\\"\\"\\"
+scalar Byte
+
+input BytesNullableFilter {
+  equals: Byte
+  in: [Byte!]
+  not: NestedBytesNullableFilter
+  notIn: [Byte!]
+}
+
+input BytesNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedBytesNullableFilter
+  _min: NestedBytesNullableFilter
+  equals: Byte
+  in: [Byte!]
+  not: NestedBytesNullableWithAggregatesFilter
+  notIn: [Byte!]
+}
+
 enum Color {
   BLUE
   GREEN
@@ -37,6 +57,7 @@ type CreateManyAndReturnPost {
   authorId: Int!
   color: Color!
   content: String!
+  payload: Byte
   uuid: String!
 }
 
@@ -100,16 +121,35 @@ type Mutation {
   createManyUser(data: [UserCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
   createOnePost(data: PostCreateInput!): Post!
   createOneUser(data: UserCreateInput): User!
-  deleteManyPost(where: PostWhereInput): AffectedRowsOutput!
-  deleteManyUser(where: UserWhereInput): AffectedRowsOutput!
+  deleteManyPost(limit: Int, where: PostWhereInput): AffectedRowsOutput!
+  deleteManyUser(limit: Int, where: UserWhereInput): AffectedRowsOutput!
   deleteOnePost(where: PostWhereUniqueInput!): Post
   deleteOneUser(where: UserWhereUniqueInput!): User
-  updateManyPost(data: PostUpdateManyMutationInput!, where: PostWhereInput): AffectedRowsOutput!
-  updateManyUser(data: UserUpdateManyMutationInput!, where: UserWhereInput): AffectedRowsOutput!
+  updateManyAndReturnPost(data: PostUpdateManyMutationInput!, limit: Int, where: PostWhereInput): [UpdateManyAndReturnPost!]!
+  updateManyAndReturnUser(data: UserUpdateManyMutationInput!, limit: Int, where: UserWhereInput): [UpdateManyAndReturnUser!]!
+  updateManyPost(data: PostUpdateManyMutationInput!, limit: Int, where: PostWhereInput): AffectedRowsOutput!
+  updateManyUser(data: UserUpdateManyMutationInput!, limit: Int, where: UserWhereInput): AffectedRowsOutput!
   updateOnePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   upsertOnePost(create: PostCreateInput!, update: PostUpdateInput!, where: PostWhereUniqueInput!): Post!
   upsertOneUser(create: UserCreateInput!, update: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+}
+
+input NestedBytesNullableFilter {
+  equals: Byte
+  in: [Byte!]
+  not: NestedBytesNullableFilter
+  notIn: [Byte!]
+}
+
+input NestedBytesNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedBytesNullableFilter
+  _min: NestedBytesNullableFilter
+  equals: Byte
+  in: [Byte!]
+  not: NestedBytesNullableWithAggregatesFilter
+  notIn: [Byte!]
 }
 
 input NestedEnumColorFilter {
@@ -240,6 +280,10 @@ input NestedStringWithAggregatesFilter {
   startsWith: String
 }
 
+input NullableBytesFieldUpdateOperationsInput {
+  set: Byte
+}
+
 input NullableStringFieldUpdateOperationsInput {
   set: String
 }
@@ -254,6 +298,7 @@ type Post {
   authorId: Int!
   color: Color!
   content: String!
+  payload: Byte
   uuid: String!
 }
 
@@ -270,6 +315,7 @@ type PostCountAggregate {
   authorId: Int!
   color: Int!
   content: Int!
+  payload: Int!
   uuid: Int!
 }
 
@@ -277,6 +323,7 @@ input PostCountOrderByAggregateInput {
   authorId: SortOrder
   color: SortOrder
   content: SortOrder
+  payload: SortOrder
   uuid: SortOrder
 }
 
@@ -284,12 +331,14 @@ input PostCreateInput {
   author: UserCreateNestedOneWithoutPostsInput!
   color: Color!
   content: String!
+  payload: Byte
   uuid: String
 }
 
 input PostCreateManyAuthorInput {
   color: Color!
   content: String!
+  payload: Byte
   uuid: String
 }
 
@@ -302,6 +351,7 @@ input PostCreateManyInput {
   authorId: Int!
   color: Color!
   content: String!
+  payload: Byte
   uuid: String
 }
 
@@ -320,6 +370,7 @@ input PostCreateOrConnectWithoutAuthorInput {
 input PostCreateWithoutAuthorInput {
   color: Color!
   content: String!
+  payload: Byte
   uuid: String
 }
 
@@ -332,6 +383,7 @@ type PostGroupBy {
   authorId: Int!
   color: Color!
   content: String!
+  payload: Byte
   uuid: String!
 }
 
@@ -345,6 +397,7 @@ type PostMaxAggregate {
   authorId: Int
   color: Color
   content: String
+  payload: Byte
   uuid: String
 }
 
@@ -352,6 +405,7 @@ input PostMaxOrderByAggregateInput {
   authorId: SortOrder
   color: SortOrder
   content: SortOrder
+  payload: SortOrder
   uuid: SortOrder
 }
 
@@ -359,6 +413,7 @@ type PostMinAggregate {
   authorId: Int
   color: Color
   content: String
+  payload: Byte
   uuid: String
 }
 
@@ -366,6 +421,7 @@ input PostMinOrderByAggregateInput {
   authorId: SortOrder
   color: SortOrder
   content: SortOrder
+  payload: SortOrder
   uuid: SortOrder
 }
 
@@ -382,6 +438,7 @@ input PostOrderByWithAggregationInput {
   authorId: SortOrder
   color: SortOrder
   content: SortOrder
+  payload: SortOrderInput
   uuid: SortOrder
 }
 
@@ -390,6 +447,7 @@ input PostOrderByWithRelationInput {
   authorId: SortOrder
   color: SortOrder
   content: SortOrder
+  payload: SortOrderInput
   uuid: SortOrder
 }
 
@@ -397,6 +455,7 @@ enum PostScalarFieldEnum {
   authorId
   color
   content
+  payload
   uuid
 }
 
@@ -407,6 +466,7 @@ input PostScalarWhereInput {
   authorId: IntFilter
   color: EnumColorFilter
   content: StringFilter
+  payload: BytesNullableFilter
   uuid: StringFilter
 }
 
@@ -417,6 +477,7 @@ input PostScalarWhereWithAggregatesInput {
   authorId: IntWithAggregatesFilter
   color: EnumColorWithAggregatesFilter
   content: StringWithAggregatesFilter
+  payload: BytesNullableWithAggregatesFilter
   uuid: StringWithAggregatesFilter
 }
 
@@ -432,12 +493,14 @@ input PostUpdateInput {
   author: UserUpdateOneRequiredWithoutPostsNestedInput
   color: EnumColorFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
+  payload: NullableBytesFieldUpdateOperationsInput
   uuid: StringFieldUpdateOperationsInput
 }
 
 input PostUpdateManyMutationInput {
   color: EnumColorFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
+  payload: NullableBytesFieldUpdateOperationsInput
   uuid: StringFieldUpdateOperationsInput
 }
 
@@ -468,6 +531,7 @@ input PostUpdateWithWhereUniqueWithoutAuthorInput {
 input PostUpdateWithoutAuthorInput {
   color: EnumColorFieldUpdateOperationsInput
   content: StringFieldUpdateOperationsInput
+  payload: NullableBytesFieldUpdateOperationsInput
   uuid: StringFieldUpdateOperationsInput
 }
 
@@ -481,10 +545,11 @@ input PostWhereInput {
   AND: [PostWhereInput!]
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]
-  author: UserRelationFilter
+  author: UserScalarRelationFilter
   authorId: IntFilter
   color: EnumColorFilter
   content: StringFilter
+  payload: BytesNullableFilter
   uuid: StringFilter
 }
 
@@ -492,10 +557,11 @@ input PostWhereUniqueInput {
   AND: [PostWhereInput!]
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]
-  author: UserRelationFilter
+  author: UserScalarRelationFilter
   authorId: IntFilter
   color: EnumColorFilter
   content: StringFilter
+  payload: BytesNullableFilter
   uuid: String
 }
 
@@ -601,6 +667,20 @@ input StringWithAggregatesFilter {
   startsWith: String
 }
 
+type UpdateManyAndReturnPost {
+  author: User!
+  authorId: Int!
+  color: Color!
+  content: String!
+  payload: Byte
+  uuid: String!
+}
+
+type UpdateManyAndReturnUser {
+  id: Int!
+  name: String
+}
+
 type User {
   _count: UserCount
   id: Int!
@@ -702,14 +782,14 @@ input UserOrderByWithRelationInput {
   posts: PostOrderByRelationAggregateInput
 }
 
-input UserRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
-}
-
 enum UserScalarFieldEnum {
   id
   name
+}
+
+input UserScalarRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
 }
 
 input UserScalarWhereWithAggregatesInput {
@@ -779,7 +859,7 @@ input UserWhereUniqueInput {
 }"
 `;
 
-exports[`generator integration should generates TypeGraphQL classes files to output folder by running \`prisma generate\`: files structure 1`] = `
+exports[`generator integration should generate TypeGraphQL classes files to the output folder by running \`prisma generate\`: files structure 1`] = `
 "
 [type-graphql]
   enhance.ts
@@ -814,6 +894,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
         FindUniquePostResolver.ts
         GroupByPostResolver.ts
         PostCrudResolver.ts
+        UpdateManyAndReturnPostResolver.ts
         UpdateManyPostResolver.ts
         UpdateOnePostResolver.ts
         UpsertOnePostResolver.ts
@@ -830,6 +911,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
           FindUniquePostArgs.ts
           FindUniquePostOrThrowArgs.ts
           GroupByPostArgs.ts
+          UpdateManyAndReturnPostArgs.ts
           UpdateManyPostArgs.ts
           UpdateOnePostArgs.ts
           UpsertOnePostArgs.ts
@@ -847,6 +929,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
         FindUniqueUserOrThrowResolver.ts
         FindUniqueUserResolver.ts
         GroupByUserResolver.ts
+        UpdateManyAndReturnUserResolver.ts
         UpdateManyUserResolver.ts
         UpdateOneUserResolver.ts
         UpsertOneUserResolver.ts
@@ -864,6 +947,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
           FindUniqueUserArgs.ts
           FindUniqueUserOrThrowArgs.ts
           GroupByUserArgs.ts
+          UpdateManyAndReturnUserArgs.ts
           UpdateManyUserArgs.ts
           UpdateOneUserArgs.ts
           UpsertOneUserArgs.ts
@@ -873,12 +957,16 @@ exports[`generator integration should generates TypeGraphQL classes files to out
       resolvers-actions.index.ts
       resolvers-crud.index.ts
     [inputs]
+      BytesNullableFilter.ts
+      BytesNullableWithAggregatesFilter.ts
       EnumColorFieldUpdateOperationsInput.ts
       EnumColorFilter.ts
       EnumColorWithAggregatesFilter.ts
       IntFieldUpdateOperationsInput.ts
       IntFilter.ts
       IntWithAggregatesFilter.ts
+      NestedBytesNullableFilter.ts
+      NestedBytesNullableWithAggregatesFilter.ts
       NestedEnumColorFilter.ts
       NestedEnumColorWithAggregatesFilter.ts
       NestedFloatFilter.ts
@@ -889,6 +977,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
       NestedStringNullableFilter.ts
       NestedStringNullableWithAggregatesFilter.ts
       NestedStringWithAggregatesFilter.ts
+      NullableBytesFieldUpdateOperationsInput.ts
       NullableStringFieldUpdateOperationsInput.ts
       PostAvgOrderByAggregateInput.ts
       PostCountOrderByAggregateInput.ts
@@ -934,7 +1023,7 @@ exports[`generator integration should generates TypeGraphQL classes files to out
       UserMinOrderByAggregateInput.ts
       UserOrderByWithAggregationInput.ts
       UserOrderByWithRelationInput.ts
-      UserRelationFilter.ts
+      UserScalarRelationFilter.ts
       UserScalarWhereWithAggregatesInput.ts
       UserSumOrderByAggregateInput.ts
       UserUpdateInput.ts
@@ -958,6 +1047,8 @@ exports[`generator integration should generates TypeGraphQL classes files to out
       PostMaxAggregate.ts
       PostMinAggregate.ts
       PostSumAggregate.ts
+      UpdateManyAndReturnPost.ts
+      UpdateManyAndReturnUser.ts
       UserAvgAggregate.ts
       UserCount.ts
       UserCountAggregate.ts
@@ -1002,6 +1093,7 @@ Object {
           },
           "color": "RED",
           "content": "post content",
+          "payload": "AQID",
         },
       ],
     },

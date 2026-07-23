@@ -68,15 +68,21 @@ export default async function generateCode(
 ) {
   ensureInstalledCorrectPrismaPackage();
 
+  const prismaClientModulePath =
+    baseOptions.prismaClientProvider === "prisma-client"
+      ? path.resolve(baseOptions.prismaClientPath, "client")
+      : baseOptions.prismaClientPath;
+
   const options: GeneratorOptions = {
     ...baseOptions,
     blocksToEmit: getBlocksToEmit(baseOptions.emitOnly),
     contextPrismaKey: baseOptions.contextPrismaKey ?? "prisma",
     relativePrismaOutputPath: toUnixPath(
-      path.relative(baseOptions.outputDirPath, baseOptions.prismaClientPath),
+      path.relative(baseOptions.outputDirPath, prismaClientModulePath),
     ),
     absolutePrismaOutputPath:
       !baseOptions.customPrismaImportPath &&
+      baseOptions.prismaClientProvider !== "prisma-client" &&
       baseOptions.prismaClientPath.includes("node_modules")
         ? "@prisma/client"
         : undefined,

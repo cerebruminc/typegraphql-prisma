@@ -2,7 +2,43 @@ import { OptionalKind, MethodDeclarationStructure, Writers } from "ts-morph";
 
 import { DmmfDocument } from "../dmmf/dmmf-document";
 import { DMMF } from "../dmmf/types";
+import type { HelpersFileImportName } from "../imports";
 import { GeneratorOptions } from "../options";
+
+export function getHelpersFileImportNames(
+  actions: readonly DMMF.Action[],
+): HelpersFileImportName[] {
+  const hasReturningManyAction = actions.some(
+    action =>
+      action.kind === DMMF.ModelAction.createManyAndReturn ||
+      action.kind === DMMF.ModelAction.updateManyAndReturn,
+  );
+  const hasAggregateAction = actions.some(
+    action =>
+      action.kind === DMMF.ModelAction.aggregate ||
+      action.kind === DMMF.ModelAction.groupBy,
+  );
+  const hasOtherAction = actions.some(
+    action =>
+      action.kind !== DMMF.ModelAction.createManyAndReturn &&
+      action.kind !== DMMF.ModelAction.updateManyAndReturn &&
+      action.kind !== DMMF.ModelAction.aggregate &&
+      action.kind !== DMMF.ModelAction.groupBy,
+  );
+
+  return [
+    ...(hasAggregateAction || hasOtherAction
+      ? (["transformInfoIntoPrismaArgs"] as const)
+      : []),
+    ...(hasReturningManyAction
+      ? (["transformInfoIntoPrismaSelect"] as const)
+      : []),
+    "getPrismaFromContext",
+    ...(hasOtherAction
+      ? (["transformCountFieldIntoSelectRelationsCount"] as const)
+      : []),
+  ];
+}
 
 export function generateCrudResolverClassMethodDeclaration(
   action: DMMF.Action,
@@ -55,29 +91,37 @@ export function generateCrudResolverClassMethodDeclaration(
           ]),
     ],
     statements:
-      action.kind === DMMF.ModelAction.aggregate
+      action.kind === DMMF.ModelAction.createManyAndReturn ||
+      action.kind === DMMF.ModelAction.updateManyAndReturn
         ? [
             /* ts */ ` return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
               ...args,
-              ...transformInfoIntoPrismaArgs(info),
+              ...transformInfoIntoPrismaSelect(info),
             });`,
           ]
-        : action.kind === DMMF.ModelAction.groupBy
+        : action.kind === DMMF.ModelAction.aggregate
           ? [
-              /* ts */ ` const { _count, _avg, _sum, _min, _max } = transformInfoIntoPrismaArgs(info);`,
               /* ts */ ` return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
+              ...args,
+              ...transformInfoIntoPrismaArgs(info),
+            });`,
+            ]
+          : action.kind === DMMF.ModelAction.groupBy
+            ? [
+                /* ts */ ` const { _count, _avg, _sum, _min, _max } = transformInfoIntoPrismaArgs(info);`,
+                /* ts */ ` return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
               ...args,
               ...Object.fromEntries(
                 Object.entries({ _count, _avg, _sum, _min, _max }).filter(([_, v]) => v != null)
               ),
             });`,
-            ]
-          : [
-              /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
+              ]
+            : [
+                /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
             return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
               ...args,
               ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
             });`,
-            ],
+              ],
   };
 }

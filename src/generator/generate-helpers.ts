@@ -28,6 +28,23 @@ export function generateHelpersFile(
   `);
 
   sourceFile.addStatements(/* ts */ `
+    export function transformInfoIntoPrismaSelect(info: GraphQLResolveInfo): Record<string, any> {
+      const fields: Record<string, any> = graphqlFields(
+        // suppress GraphQLResolveInfo types issue
+        info as any,
+        {},
+        {
+          excludedFields: ['__typename'],
+          processArguments: true,
+        }
+      );
+      return {
+        select: transformFieldsIntoPrismaSelect(fields),
+      };
+    }
+  `);
+
+  sourceFile.addStatements(/* ts */ `
     function transformFields(fields: Record<string, any>): Record<string, any> {
       return Object.fromEntries(
         Object.entries(fields)
@@ -44,6 +61,34 @@ export function generateHelpersFile(
               )];
             }
             return [key, transformFields(value)];
+          }),
+      );
+    }
+  `);
+
+  sourceFile.addStatements(/* ts */ `
+    function transformFieldsIntoPrismaSelect(fields: Record<string, any>): Record<string, any> {
+      return Object.fromEntries(
+        Object.entries(fields)
+          .map<[string, any]>(([key, value]) => {
+            if (Object.keys(value).length === 0) {
+              return [key, true];
+            }
+            const { __arguments, ...nestedFields } = value;
+            const args = __arguments
+              ? Object.fromEntries(
+                  __arguments.map((argument: object) => {
+                    const [[key, { value }]] = Object.entries(argument);
+                    return [key, value];
+                  })
+                )
+              : {};
+            return [key, {
+              ...args,
+              ...(Object.keys(nestedFields).length > 0 && {
+                select: transformFieldsIntoPrismaSelect(nestedFields),
+              }),
+            }];
           }),
       );
     }

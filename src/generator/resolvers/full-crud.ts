@@ -10,7 +10,10 @@ import {
   generateGraphQLInfoImport,
   generateHelpersFileImport,
 } from "../imports";
-import { generateCrudResolverClassMethodDeclaration } from "./helpers";
+import {
+  generateCrudResolverClassMethodDeclaration,
+  getHelpersFileImportNames,
+} from "./helpers";
 import { DmmfDocument } from "../dmmf/dmmf-document";
 import { DMMF } from "../dmmf/types";
 import { GeneratorOptions } from "../options";
@@ -43,7 +46,11 @@ export default function generateCrudResolverClassFromMapping(
       .map(it => it.argsTypeName!),
     0,
   );
-  generateHelpersFileImport(sourceFile, 3);
+  generateHelpersFileImport(
+    sourceFile,
+    3,
+    getHelpersFileImportNames(mapping.actions),
+  );
 
   const distinctOutputTypesNames = [
     ...new Set(mapping.actions.map(it => it.outputTypeName)),
