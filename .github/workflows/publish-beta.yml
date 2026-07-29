@@ -1,0 +1,81 @@
+name: Publish beta package
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: publish-beta-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set beta version
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          BASE_VERSION="$(node --print "require('./package.json').version")"
+          BETA_PACKAGE_VERSION="${BASE_VERSION}-beta.dangerous.${PR_NUMBER}.${PR_HEAD_SHA:0:7}"
+          npm pkg set version="${BETA_PACKAGE_VERSION}"
+          echo "BETA_PACKAGE_VERSION=${BETA_PACKAGE_VERSION}" >> "${GITHUB_ENV}"
+
+      - name: Build package
+        run: npm run package:build
+
+      - name: Verify package contents
+        run: npm run package:verify
+
+      - name: Publish beta package
+        run: npm run package:publish -- --tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CEREBRUM_PUBLISH_NPM_TOKEN }}
+
+      - name: Find beta package comment
+        uses: peter-evans/find-comment@v4
+        id: beta-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: "<!-- beta-package -->"
+          direction: first
+
+      - name: Comment on pull request
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.beta-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            <!-- beta-package -->
+            Published beta package: `${{ env.BETA_PACKAGE_VERSION }}`
+
+            ```sh
+            npm install @cerebruminc/typegraphql-prisma@${{ env.BETA_PACKAGE_VERSION }}
+            ```
