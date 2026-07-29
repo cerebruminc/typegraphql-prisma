@@ -17,15 +17,15 @@ const config = {
   title: "TypeGraphQL Prisma",
   tagline:
     "Prisma generator to emit TypeGraphQL type classes and CRUD resolvers from your Prisma schema",
-  url: "https://prisma.typegraphql.com",
-  baseUrl: "/",
+  url: "https://cerebruminc.github.io",
+  baseUrl: "/typegraphql-prisma/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "MichalLytek", // Usually your GitHub org/user name.
+  organizationName: "cerebruminc", // Usually your GitHub org/user name.
   projectName: "typegraphql-prisma", // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -45,7 +45,7 @@ const config = {
           path: "../docs",
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
-            "https://github.com/MichalLytek/typegraphql-prisma/edit/main/docs/",
+            "https://github.com/cerebruminc/typegraphql-prisma/edit/main/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -77,7 +77,7 @@ const config = {
             label: "Examples",
           },
           {
-            href: "https://github.com/MichalLytek/typegraphql-prisma",
+            href: "https://github.com/cerebruminc/typegraphql-prisma",
             label: "GitHub",
             position: "right",
           },
@@ -117,29 +117,16 @@ const config = {
             items: [
               {
                 label: "GitHub",
-                href: "https://github.com/MichalLytek/typegraphql-prisma",
+                href: "https://github.com/cerebruminc/typegraphql-prisma",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Michał Lytek`,
+        copyright: `Copyright © ${new Date().getFullYear()} Cerebrum Inc. Original project by Michał Lytek.`,
       },
       prism: {
         theme: vsLightTheme,
         darkTheme: vsDarkTheme,
-      },
-      algolia: {
-        appId: "G4ZB1BCPHE",
-        apiKey: "02a8d497c435602dcd39b67e73d7e53a",
-        indexName: "typegraphql_prisma",
-        // Optional: see doc section below
-        contextualSearch: true,
-        // Optional: Algolia search parameters
-        searchParameters: {
-          // facetFilters: ["type:content"],
-        },
-        // Set debug to true if you want to inspect the modal
-        debug: false,
       },
     }),
 };

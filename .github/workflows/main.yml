@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x, 21.x, 22.x]
+        node-version: [20.x, 22.x, 24.x]
 
     services:
       db:
@@ -27,16 +27,17 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
 
       - name: Setup project
         run: |
-          npm install
+          npm ci
 
       - name: Check codebase
         run: |
@@ -48,24 +49,29 @@ jobs:
           npm run test:ci
         env:
           CI: true
+          PRISMA_HIDE_UPDATE_MESSAGE: "true"
           TEST_DATABASE_URL: postgresql://user:password@localhost:5432/typegraphql-prisma
 
   deploy-website:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'cerebruminc/typegraphql-prisma' }}
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
 
       - name: Build Docusaurus website
         run: |
           cd website
-          npm i
+          npm ci
           npm run build
 
       - uses: peaceiris/actions-gh-pages@v3

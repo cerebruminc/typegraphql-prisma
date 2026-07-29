@@ -27,11 +27,11 @@ export function ensureInstalledCorrectPrismaPackage() {
     throw new Error(
       `Looks like an incorrect version "${installedVersion}" ` +
         `of the Prisma packages has been installed. ` +
-        `'typegraphql-prisma' works only with selected versions, ` +
+        `'@cerebruminc/typegraphql-prisma' works only with selected versions, ` +
         `so please ensure that you have installed a version of Prisma ` +
         `that meets the requirement: "${versionRequirement}". ` +
         `Find out more about that requirement in the docs: ` +
-        `https://prisma.typegraphql.com/docs/basics/prisma-version`,
+        `https://cerebruminc.github.io/typegraphql-prisma/docs/basics/prisma-version`,
     );
   }
 }
