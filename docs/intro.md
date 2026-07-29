@@ -9,7 +9,9 @@ Let's discover **TypeGraphQL Prisma in less than 3 minutes**.
 
 ## What it is?
 
-The [`typegraphql-prisma` package](https://www.npmjs.com/package/typegraphql-prisma) provides a [TypeGraphQL](https://typegraphql.com) integration with Prisma.
+The
+[`@cerebruminc/typegraphql-prisma` package](https://www.npmjs.com/package/@cerebruminc/typegraphql-prisma)
+provides a [TypeGraphQL](https://typegraphql.com) integration with Prisma.
 
 It generates the type classes and CRUD resolvers based on the Prisma schema, so you can execute complex queries or mutations that corresponds to the Prisma actions, without having to write any code for that.
 
@@ -22,6 +24,9 @@ generator typegraphql {
   provider = "typegraphql-prisma"
 }
 ```
+
+The provider name intentionally remains `typegraphql-prisma` even though the
+npm package is published under the `@cerebruminc` scope.
 
 Then, after running `prisma generate` you can import the generated resolvers classes and use them to build your GraphQL schema:
 

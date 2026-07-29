@@ -1,11 +1,12 @@
 {
-  "name": "typegraphql-prisma",
-  "version": "0.28.0",
+  "name": "@cerebruminc/typegraphql-prisma",
+  "version": "0.29.0",
   "scripts": {
     "prepare": "husky install",
-    "build": "tsc",
+    "build": "tsc --skipLibCheck",
     "package:build": "./package.sh",
-    "package:publish": "cd package *&& npm publish",
+    "package:verify": "npm pack ./package --dry-run",
+    "package:publish": "npm publish ./package --access public",
     "check:type": "tsc --noEmit --skipLibCheck",
     "check:experiments:postgres": "cd ./experiments/postgres && tsc --noEmit --skipLibCheck",
     "check:experiments:mongodb": "cd ./experiments/mongodb && tsc --noEmit --skipLibCheck",
@@ -74,13 +75,20 @@
     "name": "Michał Lytek",
     "url": "https://github.com/MichalLytek"
   },
+  "contributors": [
+    {
+      "name": "Cerebrum Inc.",
+      "url": "https://github.com/cerebruminc"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/MichalLytek/typegraphql-prisma.git"
+    "url": "git+https://github.com/cerebruminc/typegraphql-prisma.git"
   },
   "bugs": {
-    "url": "https://github.com/MichalLytek/typegraphql-prisma/issues"
+    "url": "https://github.com/cerebruminc/typegraphql-prisma/issues"
   },
+  "homepage": "https://cerebruminc.github.io/typegraphql-prisma/",
   "keywords": [
     "type-graphql",
     "typegraphql",
@@ -97,6 +105,10 @@
     "**/*.{js,json}": [
       "prettier --write"
     ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "private": true
 }

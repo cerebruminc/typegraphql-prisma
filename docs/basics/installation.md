@@ -13,15 +13,15 @@ First of all, you should perform all the steps described in the TypeGraphQL inst
 
 https://typegraphql.com/docs/installation.html
 
-### `typegraphql-prisma` generator
+### `@cerebruminc/typegraphql-prisma` generator
 
 After that, you have to install the generator, as a dev dependency:
 
 ```sh
-npm i -D typegraphql-prisma
+npm i -D @cerebruminc/typegraphql-prisma
 ```
 
-Furthermore, `typegraphql-prisma` requires Prisma to work properly, so please install Prisma dependencies if you don't have it already installed:
+Furthermore, `@cerebruminc/typegraphql-prisma` requires Prisma to work properly, so please install Prisma dependencies if you don't have them already installed:
 
 ```sh
 npm i -D prisma
@@ -29,7 +29,7 @@ npm i @prisma/client
 ```
 
 :::caution
-Be aware that `typegraphql-prisma` is designed to work with a selected versions of Prisma.
+Be aware that `@cerebruminc/typegraphql-prisma` is designed to work with selected versions of Prisma.
 This generator is designed to work and tested with the features of the `5.0.0` release.
 
 You can update both `prisma` and `@prisma/client` to a newer version, matching `^5.0.0`, like `5.4.2`, in order to receive important bugfixes.

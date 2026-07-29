@@ -1,46 +1,54 @@
-![integration logo](https://raw.githubusercontent.com/MichalLytek/typegraphql-prisma/main/img/integration.png)
+![integration logo](https://raw.githubusercontent.com/cerebruminc/typegraphql-prisma/main/img/integration.png)
 
-[![discord](https://img.shields.io/discord/1195751245386875040?logo=discord&color=%237289da)](https://discord.gg/cWnBAQcbg2)
-[![npm](https://img.shields.io/npm/v/typegraphql-prisma?logo=npm&color=%23CC3534)](https://www.npmjs.com/package/typegraphql-prisma)
+[![npm](https://img.shields.io/npm/v/%40cerebruminc%2Ftypegraphql-prisma?logo=npm&color=%23CC3534)](https://www.npmjs.com/package/@cerebruminc/typegraphql-prisma)
+[![CI](https://github.com/cerebruminc/typegraphql-prisma/actions/workflows/main.yml/badge.svg)](https://github.com/cerebruminc/typegraphql-prisma/actions/workflows/main.yml)
 
-# TypeGraphQL & Prisma integration
+# `@cerebruminc/typegraphql-prisma`
 
-Prisma generator to emit TypeGraphQL types and CRUD resolvers from your Prisma schema.
+Prisma generator that emits TypeGraphQL types and CRUD resolvers from a Prisma schema.
 
-[**https://prisma.typegraphql.com**](https://prisma.typegraphql.com)
+This is a community-maintained fork of
+[`MichalLytek/typegraphql-prisma`](https://github.com/MichalLytek/typegraphql-prisma),
+maintained by [Cerebrum Inc.](https://github.com/cerebruminc). It is not an
+official Prisma or TypeGraphQL package.
+
+## Installation
+
+Install the maintained package as a development dependency:
+
+```sh
+npm install --save-dev @cerebruminc/typegraphql-prisma
+```
+
+The Prisma generator provider remains `typegraphql-prisma` for compatibility:
+
+```prisma
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+```
 
 ## Documentation
 
-The documentation, installation guide, detailed description of the API and all of its features is [available on the website](https://prisma.typegraphql.com).
+The installation guide, configuration reference, and feature documentation are
+available at
+[cerebruminc.github.io/typegraphql-prisma](https://cerebruminc.github.io/typegraphql-prisma/).
 
 ## Examples
 
-You can check out some usage examples on this repo:
+Example projects are available in the
+[`examples` directory](https://github.com/cerebruminc/typegraphql-prisma/tree/main/examples).
 
-https://github.com/MichalLytek/typegraphql-prisma/blob/main/examples/Readme.md
+## Support
 
-## Feedback
+- Report bugs in [GitHub Issues](https://github.com/cerebruminc/typegraphql-prisma/issues).
+- Ask questions and propose ideas in
+  [GitHub Discussions](https://github.com/cerebruminc/typegraphql-prisma/discussions).
+- Report security vulnerabilities according to the
+  [security policy](https://github.com/cerebruminc/typegraphql-prisma/security/policy).
 
-Currently released version `0.x` is just a preview of the upcoming integration. For now it lacks some customization option - picking models or fields of object types to expose in the schema, hiding input fields as well as picking exposed args fields. However, the base functionality is working well, so I strongly encourage you to give it a try and play with it.
+## Attribution
 
-Any feedback about the developers experience or ideas about new features or enhancements are very welcome - please feel free to put your two cents by using the [GitHub Discussions feature](https://github.com/MichalLytek/typegraphql-prisma/discussions/new):
-
-<img src="https://raw.githubusercontent.com/MichalLytek/typegraphql-prisma/main/img/feedback.png" width="327"/>
-
-## Security contact information
-
-To report a security vulnerability, please use the
-[Tidelift security contact](https://tidelift.com/security).
-Tidelift will coordinate the fix and disclosure.
-
-## Future of this project
-
-This project is not sponsored by Prisma anymore, so there will be provided only bug fixes and Prisma compatibility upgrades.
-You can read more about this in the GitHub issue [#385](https://github.com/MichalLytek/typegraphql-prisma/issues/385).
-
-Let's keep `typegraphql-prisma` alive together! 💪
-
-## Community
-
-- Visit the [Official Website](https://prisma.typegraphql.com)
-- Chat on [Discord](https://discord.gg/cWnBAQcbg2)
+The original project was created by
+[Michał Lytek](https://github.com/MichalLytek). This fork preserves the original
+MIT license and copyright notice.
