@@ -111,6 +111,7 @@ However, it can also generate some resolvers which might be handy especially on 
 - createManyAndReturn
 - update
 - updateMany
+- updateManyAndReturn
 - delete
 - deleteMany
 - upsert
@@ -218,14 +219,18 @@ to even transform them dynamically (e.g. excluding all with `User` in name).
 
 When using the generated resolvers, you have to first provide the `PrismaClient` instance into the context under `prisma` key, to make it available for the crud and relations resolvers.
 
-Below you can find an example using Apollo Server V4:
+Prisma 7 also requires a database driver adapter. Below is a PostgreSQL example using Apollo Server V4 and the client output configured in the previous section:
 
-```ts {5,11}
-import { PrismaClient } from "@prisma/client";
+```ts {1-2,6-10,16}
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL!,
+});
+const prisma = new PrismaClient({ adapter });
 
 const server = new ApolloServer<MyContext>({
   schema, // from previous step
@@ -236,13 +241,9 @@ const { url } = await startStandaloneServer(server, {
 });
 ```
 
-But you can also use any other GraphQL server library, like `graphql-yoga` v3:
+You can use the same `prisma` instance with any other GraphQL server library, such as `graphql-yoga` v3:
 
-```ts {3,7}
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
+```ts {3}
 const yoga = createYoga<{}, MyContext>({
   schema, // from previous step
   context: () => ({ prisma }),

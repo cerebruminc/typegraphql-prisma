@@ -15,3 +15,5 @@ generator typegraphql {
 This will replace the standard, default system of detecting Prisma generator output folder, based on the `node_modules` presence in the Prisma `output` option.
 
 The custom Prisma import path will be used in all generated files, treated as a relative path to the `output` folder of `typegraphql-prisma` generator. This means the paths will be prepended with appropriate `'../'` for files in nested directories, like `resolvers/outputs`.
+
+With Prisma 7's `prisma-client` provider, the default import path automatically points to the generated `client` module (for example, `../generated/prisma/client`). A `customPrismaImportPath` replaces that complete module path, so include `/client` yourself when your custom path needs it.

@@ -246,6 +246,9 @@ describe("crud", () => {
     const updateManyUserResolverTSFile = await readGeneratedFile(
       "/resolvers/crud/User/UpdateManyUserResolver.ts",
     );
+    const updateManyAndReturnUserResolverTSFile = await readGeneratedFile(
+      "/resolvers/crud/User/UpdateManyAndReturnUserResolver.ts",
+    );
     const updateOneUserResolverTSFile = await readGeneratedFile(
       "/resolvers/crud/User/UpdateOneUserResolver.ts",
     );
@@ -296,6 +299,9 @@ describe("crud", () => {
     );
     expect(updateManyUserResolverTSFile).toMatchSnapshot(
       "UpdateManyUserResolver",
+    );
+    expect(updateManyAndReturnUserResolverTSFile).toMatchSnapshot(
+      "UpdateManyAndReturnUserResolver",
     );
     expect(updateOneUserResolverTSFile).toMatchSnapshot(
       "UpdateOneUserResolver",

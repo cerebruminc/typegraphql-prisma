@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom scalars should import ByteScalar for Prisma Bytes list fields: BinaryAsset model 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../scalars\\";
+
+@TypeGraphQL.ObjectType(\\"BinaryAsset\\", {})
+export class BinaryAsset {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false
+  })
+  id!: number;
+
+  @TypeGraphQL.Field(_type => [ByteScalar], {
+    nullable: false
+  })
+  chunks!: Uint8Array[];
+}
+"
+`;
+
+exports[`custom scalars should import ByteScalar for Prisma Bytes list fields: BinaryAssetCreatechunksInput 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../../scalars\\";
+
+@TypeGraphQL.InputType(\\"BinaryAssetCreatechunksInput\\", {})
+export class BinaryAssetCreatechunksInput {
+  @TypeGraphQL.Field(_type => [ByteScalar], {
+    nullable: false
+  })
+  set!: Uint8Array[];
+}
+"
+`;
+
+exports[`custom scalars should import ByteScalar for Prisma Bytes list fields: CreateManyAndReturnBinaryAsset 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../../scalars\\";
+
+@TypeGraphQL.ObjectType(\\"CreateManyAndReturnBinaryAsset\\", {})
+export class CreateManyAndReturnBinaryAsset {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false
+  })
+  id!: number;
+
+  @TypeGraphQL.Field(_type => [ByteScalar], {
+    nullable: true
+  })
+  chunks!: Uint8Array[] | null;
+}
+"
+`;
+
+exports[`custom scalars should serialize and parse Prisma 7 Bytes values as base64: BinaryAsset model 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../scalars\\";
+
+@TypeGraphQL.ObjectType(\\"BinaryAsset\\", {})
+export class BinaryAsset {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false
+  })
+  id!: number;
+
+  @TypeGraphQL.Field(_type => ByteScalar, {
+    nullable: false
+  })
+  content!: Uint8Array;
+}
+"
+`;
+
+exports[`custom scalars should serialize and parse Prisma 7 Bytes values as base64: BinaryAssetCreateInput 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../../scalars\\";
+
+@TypeGraphQL.InputType(\\"BinaryAssetCreateInput\\", {})
+export class BinaryAssetCreateInput {
+  @TypeGraphQL.Field(_type => ByteScalar, {
+    nullable: false
+  })
+  content!: Uint8Array;
+}
+"
+`;
+
+exports[`custom scalars should serialize and parse Prisma 7 Bytes values as base64: CreateManyAndReturnBinaryAsset 1`] = `
+"import * as TypeGraphQL from \\"type-graphql\\";
+import * as GraphQLScalars from \\"graphql-scalars\\";
+import { Prisma } from \\"../../../../helpers/prisma-client-mock\\";
+import { ByteScalar } from \\"../../scalars\\";
+
+@TypeGraphQL.ObjectType(\\"CreateManyAndReturnBinaryAsset\\", {})
+export class CreateManyAndReturnBinaryAsset {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false
+  })
+  id!: number;
+
+  @TypeGraphQL.Field(_type => ByteScalar, {
+    nullable: false
+  })
+  content!: Uint8Array;
+}
+"
+`;
+
+exports[`custom scalars should serialize and parse Prisma 7 Bytes values as base64: scalars 1`] = `
+"import { Prisma } from \\"./../../helpers/prisma-client-mock\\";
+import { GraphQLScalarType, Kind } from \\"graphql\\";
+import { Buffer } from \\"node:buffer\\";
+
+function parseByteValue(value: unknown): Uint8Array {
+  if (typeof value !== \\"string\\") {
+    throw new Error(\`[ByteError] Invalid argument: \${typeof value}. Expected a base64 string.\`);
+  }
+  const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}(?:==)?|[A-Za-z0-9+/]{3}=?)?$/;
+  if (!base64Pattern.test(value)) {
+    throw new Error(\\"[ByteError] Invalid argument. Expected a valid base64 string.\\");
+  }
+  const normalizedValue = value.replace(/=+$/, \\"\\");
+  const buffer = Buffer.from(value, \\"base64\\");
+  if (buffer.toString(\\"base64\\").replace(/=+$/, \\"\\") !== normalizedValue) {
+    throw new Error(\\"[ByteError] Invalid argument. Expected a valid base64 string.\\");
+  }
+  return Uint8Array.from(buffer);
+}
+
+export const ByteScalar = new GraphQLScalarType<Uint8Array, string>({
+  name: \\"Byte\\",
+  description: \\"GraphQL Scalar representing the Prisma Bytes type as a base64 string.\\",
+  serialize: (value: unknown) => {
+    if (!(value instanceof Uint8Array)) {
+      throw new Error(\`[ByteError] Invalid argument: \${Object.prototype.toString.call(value)}. Expected Uint8Array.\`);
+    }
+    return Buffer.from(value).toString(\\"base64\\");
+  },
+  parseValue: parseByteValue,
+  parseLiteral: ast => {
+    if (ast.kind !== Kind.STRING) {
+      throw new Error(\`[ByteError] Invalid AST kind: \${ast.kind}. Expected StringValue.\`);
+    }
+    return parseByteValue(ast.value);
+  },
+});
+
+export const DecimalJSScalar = new GraphQLScalarType({
+  name: \\"Decimal\\",
+  description: \\"GraphQL Scalar representing the Prisma.Decimal type, based on Decimal.js library.\\",
+  serialize: (value: unknown) => {
+    if (!(Prisma.Decimal.isDecimal(value))) {
+      throw new Error(\`[DecimalError] Invalid argument: \${Object.prototype.toString.call(value)}. Expected Prisma.Decimal.\`);
+    }
+    return (value as Prisma.Decimal).toString();
+  },
+  parseValue: (value: unknown) => {
+    if (!(typeof value === \\"string\\")) {
+      throw new Error(\`[DecimalError] Invalid argument: \${typeof value}. Expected string.\`);
+    }
+    return new Prisma.Decimal(value);
+  },
+});
+
+"
+`;

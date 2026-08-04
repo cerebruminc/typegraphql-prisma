@@ -8,6 +8,7 @@ import removeDir from "../utils/removeDir";
 import {
   ExternalGeneratorOptions,
   InternalGeneratorOptions,
+  PrismaClientProvider,
 } from "../generator/options";
 import { ALL_EMIT_BLOCK_KINDS } from "../generator/emit-block";
 import {
@@ -19,17 +20,33 @@ import {
 
 export async function generate(options: GeneratorOptions) {
   const outputDir = parseEnvValue(options.generator.output!);
-  await asyncFs.mkdir(outputDir, { recursive: true });
-  await removeDir(outputDir, true);
 
-  const prismaClientProvider = options.otherGenerators.find(
-    it => parseEnvValue(it.provider) === "prisma-client-js",
-  )!;
-  const prismaClientPath = parseEnvValue(prismaClientProvider.output!);
-  const prismaClientDmmf = await getDMMF({
-    datamodel: options.datamodel,
-    previewFeatures: prismaClientProvider.previewFeatures,
-  });
+  const supportedClientProviders: PrismaClientProvider[] = [
+    "prisma-client",
+    "prisma-client-js",
+  ];
+  const prismaClientGenerator = supportedClientProviders
+    .map(provider =>
+      options.otherGenerators.find(
+        generator => parseEnvValue(generator.provider) === provider,
+      ),
+    )
+    .find(generator => generator !== undefined);
+  if (!prismaClientGenerator) {
+    throw new Error(
+      "The TypeGraphQL generator requires a Prisma Client generator. " +
+        'Add a generator using provider = "prisma-client" to your Prisma schema.',
+    );
+  }
+  if (!prismaClientGenerator.output) {
+    throw new Error(
+      `The ${parseEnvValue(prismaClientGenerator.provider)} generator must define an output path.`,
+    );
+  }
+  const prismaClientProvider = parseEnvValue(
+    prismaClientGenerator.provider,
+  ) as PrismaClientProvider;
+  const prismaClientPath = parseEnvValue(prismaClientGenerator.output);
 
   const generatorConfig = options.generator.config;
   // TODO: make this type `?-` and `| undefined`
@@ -76,9 +93,27 @@ export async function generate(options: GeneratorOptions) {
       ),
     emitIsAbstract: parseStringBoolean(generatorConfig.emitIsAbstract) ?? false,
   };
+  const emitsTranspiledCode =
+    externalConfig.emitTranspiledCode ?? outputDir.includes("node_modules");
+  if (prismaClientProvider === "prisma-client" && emitsTranspiledCode) {
+    throw new Error(
+      'The Prisma 7 "prisma-client" generator emits TypeScript source files, ' +
+        "so TypeGraphQL cannot emit transpiled JavaScript that imports it. " +
+        'Configure the TypeGraphQL generator output outside "node_modules" ' +
+        "and set emitTranspiledCode = false.",
+    );
+  }
+
+  await asyncFs.mkdir(outputDir, { recursive: true });
+  await removeDir(outputDir, true);
+
+  const prismaClientDmmf = await getDMMF({
+    datamodel: options.datamodel,
+  });
   const internalConfig: InternalGeneratorOptions = {
     outputDirPath: outputDir,
     prismaClientPath,
+    prismaClientProvider,
   };
 
   if (externalConfig.emitDMMF) {

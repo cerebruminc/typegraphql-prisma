@@ -5,24 +5,49 @@ sidebar_position: 2
 
 ## Creating generator block
 
-After installation, you need to update your `schema.prisma` file and then add a new generator section below the `client` one:
+After installation, update your `schema.prisma` file and add a TypeGraphQL generator below the Prisma Client generator:
 
-```prisma {10-12}
+```prisma {5-16}
 datasource postgres {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider            = "prisma-client"
+  output              = "../generated/prisma"
+  moduleFormat        = "cjs"
+  importFileExtension = ""
 }
 
 generator typegraphql {
   provider = "typegraphql-prisma"
+  output   = "../generated/type-graphql"
 }
 ```
 
-Then run `npx prisma generate` - this will emit the generated TypeGraphQL classes to the `@generated/type-graphql` folder inside `node_modules`.
+The Prisma 7 `prisma-client` generator requires an explicit `output`. The TypeGraphQL output is also explicit here so both generated codebases can be compiled with your application. `typegraphql-prisma` automatically imports Prisma Client from the generated `client` module.
+
+Prisma 7 moves the datasource URL to `prisma.config.ts`. For a schema at `prisma/schema.prisma`, a minimal configuration is:
+
+```ts title=prisma.config.ts
+import { defineConfig, env } from "prisma/config";
+
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+  },
+  datasource: {
+    url: env("DATABASE_URL"),
+  },
+});
+```
+
+Then run `npx prisma generate`.
+
+:::note
+The legacy `prisma-client-js` provider is still recognized for compatibility, but new Prisma 7 projects should use `prisma-client`.
+:::
 
 ## Changing output folder
 
@@ -37,9 +62,13 @@ generator typegraphql {
 
 ## Emitting transpiled code
 
-By default, when the output path contains `node_modules`, the generated code is transpiled - consist of `*.js` and `*.d.ts` files that are ready to use (import) in your code.
+By default, when the output path contains `node_modules`, the generated code is transpiled and consists of `*.js` and `*.d.ts` files that are ready to import in your code.
 
-However, if you explicitly choose some other (non `node_modules`) folder in `output` config, the generated code will be emitted as a raw TS source code files which you can just use and import like your other source code files.
+:::caution
+Prisma 7's `prisma-client` generator emits TypeScript source files. When using that provider, keep the TypeGraphQL output outside `node_modules` and leave `emitTranspiledCode` disabled so your application compiles both generated codebases together.
+:::
+
+However, if you explicitly choose another folder outside `node_modules`, the generated code is emitted as raw TypeScript source files that you can compile and import like your other application source files.
 
 You can override that behavior by explicitly setting `emitTranspiledCode` config option:
 

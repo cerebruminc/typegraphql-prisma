@@ -400,6 +400,102 @@ describe("crud resolvers execution", () => {
     });
   });
 
+  describe("returning many records", () => {
+    beforeAll(async () => {
+      outputDirPath = generateArtifactsDirPath("functional-crud-return-many");
+      await fs.mkdir(outputDirPath, { recursive: true });
+      const prismaSchema = /* prisma */ `
+        model User {
+          id    Int    @id @default(autoincrement())
+          name  String
+          posts Post[]
+        }
+
+        model Post {
+          id       Int    @id @default(autoincrement())
+          content  String
+          authorId Int
+          author   User   @relation(fields: [authorId], references: [id])
+        }
+      `;
+      await generateCodeFromSchema(prismaSchema, { outputDirPath });
+      const { PostCrudResolver } = require(
+        outputDirPath + "/resolvers/crud/Post/PostCrudResolver.ts",
+      );
+
+      graphQLSchema = await buildSchema({
+        resolvers: [PostCrudResolver],
+        validate: false,
+      });
+    });
+
+    it("should select relations requested from updateManyAndReturn", async () => {
+      const document = /* graphql */ `
+        mutation {
+          updateManyAndReturnPost(
+            data: {
+              content: { set: "updated" }
+            }
+          ) {
+            id
+            author {
+              id
+              name
+            }
+          }
+        }
+      `;
+      const prismaMock = {
+        post: {
+          updateManyAndReturn: jest.fn().mockResolvedValue([
+            {
+              id: 1,
+              author: {
+                id: 2,
+                name: "author",
+              },
+            },
+          ]),
+        },
+      };
+
+      const { data, errors } = await graphql({
+        schema: graphQLSchema,
+        source: document,
+        contextValue: { prisma: prismaMock },
+      });
+
+      expect(errors).toBeUndefined();
+      expect(data).toEqual({
+        updateManyAndReturnPost: [
+          {
+            id: 1,
+            author: {
+              id: 2,
+              name: "author",
+            },
+          },
+        ],
+      });
+      expect(prismaMock.post.updateManyAndReturn).toHaveBeenCalledWith({
+        data: {
+          content: {
+            set: "updated",
+          },
+        },
+        select: {
+          id: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+    });
+  });
+
   describe("aggregations", () => {
     beforeAll(async () => {
       outputDirPath = generateArtifactsDirPath("functional-crud");

@@ -368,8 +368,8 @@ describe("inputs", () => {
     const firstModelOrderByWithRelationInputTSFile = await readGeneratedFile(
       "/resolvers/inputs/FirstModelOrderByWithRelationInput.ts",
     );
-    const firstModelRelationFilterTSFile = await readGeneratedFile(
-      "/resolvers/inputs/FirstModelRelationFilter.ts",
+    const firstModelScalarRelationFilterTSFile = await readGeneratedFile(
+      "/resolvers/inputs/FirstModelScalarRelationFilter.ts",
     );
     const secondModelWhereInputTSFile = await readGeneratedFile(
       "/resolvers/inputs/SecondModelWhereInput.ts",
@@ -395,8 +395,8 @@ describe("inputs", () => {
     expect(firstModelOrderByWithRelationInputTSFile).toMatchSnapshot(
       "FirstModelOrderByWithRelationInput",
     );
-    expect(firstModelRelationFilterTSFile).toMatchSnapshot(
-      "FirstModelRelationFilter",
+    expect(firstModelScalarRelationFilterTSFile).toMatchSnapshot(
+      "FirstModelScalarRelationFilter",
     );
     expect(secondModelWhereInputTSFile).toMatchSnapshot(
       "SecondModelWhereInput",
@@ -995,9 +995,10 @@ describe("inputs", () => {
         await readGeneratedFile(
           "/resolvers/inputs/RenamedFirstModelOrderByWithRelationInput.ts",
         );
-      const renamedFirstModelRelationFilterTSFile = await readGeneratedFile(
-        "/resolvers/inputs/RenamedFirstModelRelationFilter.ts",
-      );
+      const renamedFirstModelScalarRelationFilterTSFile =
+        await readGeneratedFile(
+          "/resolvers/inputs/RenamedFirstModelScalarRelationFilter.ts",
+        );
       const renamedSecondModelWhereInputTSFile = await readGeneratedFile(
         "/resolvers/inputs/RenamedSecondModelWhereInput.ts",
       );
@@ -1026,8 +1027,8 @@ describe("inputs", () => {
       expect(renamedFirstModelOrderByWithRelationInputTSFile).toMatchSnapshot(
         "RenamedFirstModelOrderByWithRelationInput",
       );
-      expect(renamedFirstModelRelationFilterTSFile).toMatchSnapshot(
-        "RenamedFirstModelRelationFilter",
+      expect(renamedFirstModelScalarRelationFilterTSFile).toMatchSnapshot(
+        "RenamedFirstModelScalarRelationFilter",
       );
       expect(renamedSecondModelWhereInputTSFile).toMatchSnapshot(
         "RenamedSecondModelWhereInput",
