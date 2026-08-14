@@ -1,14 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { UserCreateOrConnectWithoutPostsInput } from "../inputs/UserCreateOrConnectWithoutPostsInput";
 import { UserCreateWithoutPostsInput } from "../inputs/UserCreateWithoutPostsInput";
 import { UserWhereUniqueInput } from "../inputs/UserWhereUniqueInput";
 
-@TypeGraphQL.InputType("UserCreateNestedOneWithoutPostsInput", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("UserCreateNestedOneWithoutPostsInput", {})
 export class UserCreateNestedOneWithoutPostsInput {
   @TypeGraphQL.Field(_type => UserCreateWithoutPostsInput, {
     nullable: true

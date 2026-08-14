@@ -1,12 +1,9 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { PostWhereInput } from "../inputs/PostWhereInput";
 
-@TypeGraphQL.InputType("PostListRelationFilter", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("PostListRelationFilter", {})
 export class PostListRelationFilter {
   @TypeGraphQL.Field(_type => PostWhereInput, {
     nullable: true

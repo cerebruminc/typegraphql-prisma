@@ -4,6 +4,7 @@
     "module": "commonjs",
     "lib": ["es2021"],
     "strict": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true

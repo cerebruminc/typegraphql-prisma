@@ -3,6 +3,7 @@ lib
 dist
 package
 tests/artifacts
+examples/*/prisma/generated/prisma
 coverage
 .env
 npm-debug.log*

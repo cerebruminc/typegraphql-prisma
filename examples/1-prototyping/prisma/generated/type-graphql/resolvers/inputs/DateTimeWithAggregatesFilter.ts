@@ -1,14 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { NestedDateTimeFilter } from "../inputs/NestedDateTimeFilter";
 import { NestedDateTimeWithAggregatesFilter } from "../inputs/NestedDateTimeWithAggregatesFilter";
 import { NestedIntFilter } from "../inputs/NestedIntFilter";
 
-@TypeGraphQL.InputType("DateTimeWithAggregatesFilter", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("DateTimeWithAggregatesFilter", {})
 export class DateTimeWithAggregatesFilter {
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

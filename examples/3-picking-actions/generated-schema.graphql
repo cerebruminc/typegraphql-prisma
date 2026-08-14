@@ -80,8 +80,13 @@ input NestedStringNullableFilter {
   startsWith: String
 }
 
+enum NullsOrder {
+  first
+  last
+}
+
 type Post {
-  author: User
+  author(where: UserWhereInput): User
   authorId: String
   content: String
   createdAt: DateTime!
@@ -134,8 +139,8 @@ input PostOrderByRelationAggregateInput {
 
 input PostOrderByWithRelationInput {
   author: UserOrderByWithRelationInput
-  authorId: SortOrder
-  content: SortOrder
+  authorId: SortOrderInput
+  content: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
   published: SortOrder
@@ -157,7 +162,7 @@ input PostWhereInput {
   AND: [PostWhereInput!]
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]
-  author: UserRelationFilter
+  author: UserNullableScalarRelationFilter
   authorId: StringNullableFilter
   content: StringNullableFilter
   createdAt: DateTimeFilter
@@ -168,7 +173,17 @@ input PostWhereInput {
 }
 
 input PostWhereUniqueInput {
+  AND: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  author: UserNullableScalarRelationFilter
+  authorId: StringNullableFilter
+  content: StringNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  published: BoolFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 type Query {
@@ -183,6 +198,11 @@ type Query {
 enum SortOrder {
   asc
   desc
+}
+
+input SortOrderInput {
+  nulls: NullsOrder
+  sort: SortOrder!
 }
 
 input StringFilter {
@@ -222,7 +242,7 @@ type User {
 }
 
 type UserCount {
-  posts: Int!
+  posts(where: PostWhereInput): Int!
 }
 
 type UserCountAggregate {
@@ -244,16 +264,16 @@ type UserMinAggregate {
   name: String
 }
 
+input UserNullableScalarRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
 input UserOrderByWithRelationInput {
   email: SortOrder
   id: SortOrder
-  name: SortOrder
+  name: SortOrderInput
   posts: PostOrderByRelationAggregateInput
-}
-
-input UserRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
 }
 
 enum UserScalarFieldEnum {
@@ -273,6 +293,11 @@ input UserWhereInput {
 }
 
 input UserWhereUniqueInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
   email: String
   id: String
+  name: StringNullableFilter
+  posts: PostListRelationFilter
 }

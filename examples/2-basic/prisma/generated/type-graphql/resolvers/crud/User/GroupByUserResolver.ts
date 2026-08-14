@@ -3,7 +3,7 @@ import type { GraphQLResolveInfo } from "graphql";
 import { GroupByUserArgs } from "./args/GroupByUserArgs";
 import { User } from "../../../models/User";
 import { UserGroupBy } from "../../outputs/UserGroupBy";
-import { transformInfoIntoPrismaArgs, getPrismaFromContext, transformCountFieldIntoSelectRelationsCount } from "../../../helpers";
+import { transformInfoIntoPrismaArgs, getPrismaFromContext } from "../../../helpers";
 
 @TypeGraphQL.Resolver(_of => User)
 export class GroupByUserResolver {

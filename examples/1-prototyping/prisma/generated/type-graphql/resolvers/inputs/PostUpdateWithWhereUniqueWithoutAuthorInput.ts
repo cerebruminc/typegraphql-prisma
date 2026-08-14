@@ -1,13 +1,10 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { PostUpdateWithoutAuthorInput } from "../inputs/PostUpdateWithoutAuthorInput";
 import { PostWhereUniqueInput } from "../inputs/PostWhereUniqueInput";
 
-@TypeGraphQL.InputType("PostUpdateWithWhereUniqueWithoutAuthorInput", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("PostUpdateWithWhereUniqueWithoutAuthorInput", {})
 export class PostUpdateWithWhereUniqueWithoutAuthorInput {
   @TypeGraphQL.Field(_type => PostWhereUniqueInput, {
     nullable: false

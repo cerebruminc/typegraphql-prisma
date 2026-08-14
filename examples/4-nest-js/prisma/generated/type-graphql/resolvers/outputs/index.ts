@@ -1,12 +1,17 @@
 export { AffectedRowsOutput } from "./AffectedRowsOutput";
 export { AggregatePost } from "./AggregatePost";
 export { AggregateUser } from "./AggregateUser";
+export { CreateManyAndReturnPost } from "./CreateManyAndReturnPost";
+export { CreateManyAndReturnUser } from "./CreateManyAndReturnUser";
 export { PostCountAggregate } from "./PostCountAggregate";
 export { PostGroupBy } from "./PostGroupBy";
 export { PostMaxAggregate } from "./PostMaxAggregate";
 export { PostMinAggregate } from "./PostMinAggregate";
+export { UpdateManyAndReturnPost } from "./UpdateManyAndReturnPost";
+export { UpdateManyAndReturnUser } from "./UpdateManyAndReturnUser";
 export { UserCount } from "./UserCount";
 export { UserCountAggregate } from "./UserCountAggregate";
 export { UserGroupBy } from "./UserGroupBy";
 export { UserMaxAggregate } from "./UserMaxAggregate";
 export { UserMinAggregate } from "./UserMinAggregate";
+export * from "./args";
