@@ -1,14 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { PostListRelationFilter } from "../inputs/PostListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 
-@TypeGraphQL.InputType("UserWhereInput", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("UserWhereInput", {})
 export class UserWhereInput {
   @TypeGraphQL.Field(_type => [UserWhereInput], {
     nullable: true

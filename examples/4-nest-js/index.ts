@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
 import { Resolver, Query, FieldResolver, Ctx, Root } from "type-graphql";
 import { TypeGraphQLModule } from "typegraphql-nestjs";
 import { NestFactory } from "@nestjs/core";
@@ -19,6 +18,7 @@ import {
   UserCrudResolver,
   PostCrudResolver,
 } from "./prisma/generated/type-graphql";
+import { prisma, PrismaClient } from "./prisma/client";
 
 interface Context {
   prisma: PrismaClient;
@@ -48,8 +48,6 @@ class CustomUserResolver {
 }
 
 async function main() {
-  const prisma = new PrismaClient();
-
   @Module({
     imports: [
       // use the TypeGraphQLModule to expose Prisma by GraphQL

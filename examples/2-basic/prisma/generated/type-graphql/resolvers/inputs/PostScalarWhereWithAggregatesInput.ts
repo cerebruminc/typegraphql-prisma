@@ -1,15 +1,12 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { BoolWithAggregatesFilter } from "../inputs/BoolWithAggregatesFilter";
 import { DateTimeWithAggregatesFilter } from "../inputs/DateTimeWithAggregatesFilter";
 import { StringNullableWithAggregatesFilter } from "../inputs/StringNullableWithAggregatesFilter";
 import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
-@TypeGraphQL.InputType("PostScalarWhereWithAggregatesInput", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("PostScalarWhereWithAggregatesInput", {})
 export class PostScalarWhereWithAggregatesInput {
   @TypeGraphQL.Field(_type => [PostScalarWhereWithAggregatesInput], {
     nullable: true

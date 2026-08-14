@@ -8,4 +8,9 @@ export class DeleteManyPostArgs {
     nullable: true
   })
   where?: PostWhereInput | undefined;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true
+  })
+  limit?: number | undefined;
 }

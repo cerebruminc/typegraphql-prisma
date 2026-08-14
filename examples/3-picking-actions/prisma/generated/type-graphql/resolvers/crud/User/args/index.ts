@@ -1,4 +1,6 @@
 export { AggregateUserArgs } from "./AggregateUserArgs";
+export { CreateManyAndReturnUserArgs } from "./CreateManyAndReturnUserArgs";
+export { CreateManyUserArgs } from "./CreateManyUserArgs";
 export { CreateOneUserArgs } from "./CreateOneUserArgs";
 export { DeleteManyUserArgs } from "./DeleteManyUserArgs";
 export { DeleteOneUserArgs } from "./DeleteOneUserArgs";
@@ -8,6 +10,7 @@ export { FindManyUserArgs } from "./FindManyUserArgs";
 export { FindUniqueUserArgs } from "./FindUniqueUserArgs";
 export { FindUniqueUserOrThrowArgs } from "./FindUniqueUserOrThrowArgs";
 export { GroupByUserArgs } from "./GroupByUserArgs";
+export { UpdateManyAndReturnUserArgs } from "./UpdateManyAndReturnUserArgs";
 export { UpdateManyUserArgs } from "./UpdateManyUserArgs";
 export { UpdateOneUserArgs } from "./UpdateOneUserArgs";
 export { UpsertOneUserArgs } from "./UpsertOneUserArgs";

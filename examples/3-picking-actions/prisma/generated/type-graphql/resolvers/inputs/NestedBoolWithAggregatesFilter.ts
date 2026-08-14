@@ -1,13 +1,10 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { NestedBoolFilter } from "../inputs/NestedBoolFilter";
 import { NestedIntFilter } from "../inputs/NestedIntFilter";
 
-@TypeGraphQL.InputType("NestedBoolWithAggregatesFilter", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("NestedBoolWithAggregatesFilter", {})
 export class NestedBoolWithAggregatesFilter {
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true

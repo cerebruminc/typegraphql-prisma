@@ -1,14 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { UserCountAggregate } from "../outputs/UserCountAggregate";
 import { UserMaxAggregate } from "../outputs/UserMaxAggregate";
 import { UserMinAggregate } from "../outputs/UserMinAggregate";
 
-@TypeGraphQL.ObjectType("AggregateUser", {
-  isAbstract: true
-})
+@TypeGraphQL.ObjectType("AggregateUser", {})
 export class AggregateUser {
   @TypeGraphQL.Field(_type => UserCountAggregate, {
     nullable: true

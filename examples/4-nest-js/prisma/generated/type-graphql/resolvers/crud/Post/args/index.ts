@@ -1,4 +1,6 @@
 export { AggregatePostArgs } from "./AggregatePostArgs";
+export { CreateManyAndReturnPostArgs } from "./CreateManyAndReturnPostArgs";
+export { CreateManyPostArgs } from "./CreateManyPostArgs";
 export { CreateOnePostArgs } from "./CreateOnePostArgs";
 export { DeleteManyPostArgs } from "./DeleteManyPostArgs";
 export { DeleteOnePostArgs } from "./DeleteOnePostArgs";
@@ -8,6 +10,7 @@ export { FindManyPostArgs } from "./FindManyPostArgs";
 export { FindUniquePostArgs } from "./FindUniquePostArgs";
 export { FindUniquePostOrThrowArgs } from "./FindUniquePostOrThrowArgs";
 export { GroupByPostArgs } from "./GroupByPostArgs";
+export { UpdateManyAndReturnPostArgs } from "./UpdateManyAndReturnPostArgs";
 export { UpdateManyPostArgs } from "./UpdateManyPostArgs";
 export { UpdateOnePostArgs } from "./UpdateOnePostArgs";
 export { UpsertOnePostArgs } from "./UpsertOnePostArgs";

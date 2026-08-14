@@ -8,4 +8,9 @@ export class DeleteManyUserArgs {
     nullable: true
   })
   where?: UserWhereInput | undefined;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true
+  })
+  limit?: number | undefined;
 }

@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
 
 import {
   UserRelationsResolver,
@@ -16,6 +15,7 @@ import {
   // PostCrudResolver,
   // UserCrudResolver,
 } from "./prisma/generated/type-graphql";
+import { prisma, PrismaClient } from "./prisma/client";
 
 interface Context {
   prisma: PrismaClient;
@@ -39,7 +39,6 @@ async function main() {
     validate: false,
   });
 
-  const prisma = new PrismaClient();
   const server = new ApolloServer({
     schema,
     context: (): Context => ({ prisma }),

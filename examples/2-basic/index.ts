@@ -9,7 +9,6 @@ import {
 } from "type-graphql";
 import { ApolloServer } from "apollo-server";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
 
 import {
   User,
@@ -19,6 +18,7 @@ import {
   UserCrudResolver,
   PostCrudResolver,
 } from "./prisma/generated/type-graphql";
+import { prisma, PrismaClient } from "./prisma/client";
 
 interface Context {
   prisma: PrismaClient;
@@ -59,8 +59,6 @@ async function main() {
     emitSchemaFile: path.resolve(__dirname, "./generated-schema.graphql"),
     validate: false,
   });
-
-  const prisma = new PrismaClient();
 
   const server = new ApolloServer({
     schema,

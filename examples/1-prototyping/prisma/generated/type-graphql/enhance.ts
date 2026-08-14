@@ -8,6 +8,8 @@ import * as models from "./models";
 import * as outputTypes from "./resolvers/outputs";
 import * as inputTypes from "./resolvers/inputs";
 
+export type MethodDecoratorOverrideFn = (decorators: MethodDecorator[]) => MethodDecorator[];
+
 const crudResolversMap = {
   User: crudResolvers.UserCrudResolver,
   Post: crudResolvers.PostCrudResolver
@@ -15,6 +17,8 @@ const crudResolversMap = {
 const actionResolversMap = {
   User: {
     aggregateUser: actionResolvers.AggregateUserResolver,
+    createManyUser: actionResolvers.CreateManyUserResolver,
+    createManyAndReturnUser: actionResolvers.CreateManyAndReturnUserResolver,
     createOneUser: actionResolvers.CreateOneUserResolver,
     deleteManyUser: actionResolvers.DeleteManyUserResolver,
     deleteOneUser: actionResolvers.DeleteOneUserResolver,
@@ -25,11 +29,14 @@ const actionResolversMap = {
     getUser: actionResolvers.FindUniqueUserOrThrowResolver,
     groupByUser: actionResolvers.GroupByUserResolver,
     updateManyUser: actionResolvers.UpdateManyUserResolver,
+    updateManyAndReturnUser: actionResolvers.UpdateManyAndReturnUserResolver,
     updateOneUser: actionResolvers.UpdateOneUserResolver,
     upsertOneUser: actionResolvers.UpsertOneUserResolver
   },
   Post: {
     aggregatePost: actionResolvers.AggregatePostResolver,
+    createManyPost: actionResolvers.CreateManyPostResolver,
+    createManyAndReturnPost: actionResolvers.CreateManyAndReturnPostResolver,
     createOnePost: actionResolvers.CreateOnePostResolver,
     deleteManyPost: actionResolvers.DeleteManyPostResolver,
     deleteOnePost: actionResolvers.DeleteOnePostResolver,
@@ -40,18 +47,21 @@ const actionResolversMap = {
     getPost: actionResolvers.FindUniquePostOrThrowResolver,
     groupByPost: actionResolvers.GroupByPostResolver,
     updateManyPost: actionResolvers.UpdateManyPostResolver,
+    updateManyAndReturnPost: actionResolvers.UpdateManyAndReturnPostResolver,
     updateOnePost: actionResolvers.UpdateOnePostResolver,
     upsertOnePost: actionResolvers.UpsertOnePostResolver
   }
 };
 const crudResolversInfo = {
-  User: ["aggregateUser", "createOneUser", "deleteManyUser", "deleteOneUser", "findFirstUser", "findFirstUserOrThrow", "users", "user", "getUser", "groupByUser", "updateManyUser", "updateOneUser", "upsertOneUser"],
-  Post: ["aggregatePost", "createOnePost", "deleteManyPost", "deleteOnePost", "findFirstPost", "findFirstPostOrThrow", "posts", "post", "getPost", "groupByPost", "updateManyPost", "updateOnePost", "upsertOnePost"]
+  User: ["aggregateUser", "createManyUser", "createManyAndReturnUser", "createOneUser", "deleteManyUser", "deleteOneUser", "findFirstUser", "findFirstUserOrThrow", "users", "user", "getUser", "groupByUser", "updateManyUser", "updateManyAndReturnUser", "updateOneUser", "upsertOneUser"],
+  Post: ["aggregatePost", "createManyPost", "createManyAndReturnPost", "createOnePost", "deleteManyPost", "deleteOnePost", "findFirstPost", "findFirstPostOrThrow", "posts", "post", "getPost", "groupByPost", "updateManyPost", "updateManyAndReturnPost", "updateOnePost", "upsertOnePost"]
 };
 const argsInfo = {
   AggregateUserArgs: ["where", "orderBy", "cursor", "take", "skip"],
+  CreateManyUserArgs: ["data"],
+  CreateManyAndReturnUserArgs: ["data"],
   CreateOneUserArgs: ["data"],
-  DeleteManyUserArgs: ["where"],
+  DeleteManyUserArgs: ["where", "limit"],
   DeleteOneUserArgs: ["where"],
   FindFirstUserArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
   FindFirstUserOrThrowArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
@@ -59,12 +69,15 @@ const argsInfo = {
   FindUniqueUserArgs: ["where"],
   FindUniqueUserOrThrowArgs: ["where"],
   GroupByUserArgs: ["where", "orderBy", "by", "having", "take", "skip"],
-  UpdateManyUserArgs: ["data", "where"],
+  UpdateManyUserArgs: ["data", "where", "limit"],
+  UpdateManyAndReturnUserArgs: ["data", "where", "limit"],
   UpdateOneUserArgs: ["data", "where"],
   UpsertOneUserArgs: ["where", "create", "update"],
   AggregatePostArgs: ["where", "orderBy", "cursor", "take", "skip"],
+  CreateManyPostArgs: ["data"],
+  CreateManyAndReturnPostArgs: ["data"],
   CreateOnePostArgs: ["data"],
-  DeleteManyPostArgs: ["where"],
+  DeleteManyPostArgs: ["where", "limit"],
   DeleteOnePostArgs: ["where"],
   FindFirstPostArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
   FindFirstPostOrThrowArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
@@ -72,7 +85,8 @@ const argsInfo = {
   FindUniquePostArgs: ["where"],
   FindUniquePostOrThrowArgs: ["where"],
   GroupByPostArgs: ["where", "orderBy", "by", "having", "take", "skip"],
-  UpdateManyPostArgs: ["data", "where"],
+  UpdateManyPostArgs: ["data", "where", "limit"],
+  UpdateManyAndReturnPostArgs: ["data", "where", "limit"],
   UpdateOnePostArgs: ["data", "where"],
   UpsertOnePostArgs: ["where", "create", "update"]
 };
@@ -85,7 +99,12 @@ type ModelResolverActionNames<
 
 export type ResolverActionsConfig<
   TModel extends ResolverModelNames
-> = Partial<Record<ModelResolverActionNames<TModel> | "_all", MethodDecorator[]>>;
+> = Partial<Record<ModelResolverActionNames<TModel>, MethodDecorator[] | MethodDecoratorOverrideFn>>
+  & {
+    _all?: MethodDecorator[];
+    _query?: MethodDecorator[];
+    _mutation?: MethodDecorator[];
+  };
 
 export type ResolversEnhanceMap = {
   [TModel in ResolverModelNames]?: ResolverActionsConfig<TModel>;
@@ -94,29 +113,32 @@ export type ResolversEnhanceMap = {
 export function applyResolversEnhanceMap(
   resolversEnhanceMap: ResolversEnhanceMap,
 ) {
+  const mutationOperationPrefixes = [
+    "createOne", "createMany", "createManyAndReturn", "deleteOne", "updateOne", "deleteMany", "updateMany", "updateManyAndReturn", "upsertOne"
+  ];
   for (const resolversEnhanceMapKey of Object.keys(resolversEnhanceMap)) {
     const modelName = resolversEnhanceMapKey as keyof typeof resolversEnhanceMap;
     const crudTarget = crudResolversMap[modelName].prototype;
     const resolverActionsConfig = resolversEnhanceMap[modelName]!;
     const actionResolversConfig = actionResolversMap[modelName];
-    if (resolverActionsConfig._all) {
-      const allActionsDecorators = resolverActionsConfig._all;
-      const resolverActionNames = crudResolversInfo[modelName as keyof typeof crudResolversInfo];
-      for (const resolverActionName of resolverActionNames) {
-        const actionTarget = (actionResolversConfig[
-          resolverActionName as keyof typeof actionResolversConfig
-        ] as Function).prototype;
-        tslib.__decorate(allActionsDecorators, crudTarget, resolverActionName, null);
-        tslib.__decorate(allActionsDecorators, actionTarget, resolverActionName, null);
-      }
-    }
-    const resolverActionsToApply = Object.keys(resolverActionsConfig).filter(
-      it => it !== "_all"
-    );
-    for (const resolverActionName of resolverActionsToApply) {
-      const decorators = resolverActionsConfig[
+    const allActionsDecorators = resolverActionsConfig._all;
+    const resolverActionNames = crudResolversInfo[modelName as keyof typeof crudResolversInfo];
+    for (const resolverActionName of resolverActionNames) {
+      const maybeDecoratorsOrFn = resolverActionsConfig[
         resolverActionName as keyof typeof resolverActionsConfig
-      ] as MethodDecorator[];
+      ] as MethodDecorator[] | MethodDecoratorOverrideFn | undefined;
+      const isWriteOperation = mutationOperationPrefixes.some(prefix => resolverActionName.startsWith(prefix));
+      const operationKindDecorators = isWriteOperation ? resolverActionsConfig._mutation : resolverActionsConfig._query;
+      const mainDecorators = [
+        ...allActionsDecorators ?? [],
+        ...operationKindDecorators ?? [],
+      ]
+      let decorators: MethodDecorator[];
+      if (typeof maybeDecoratorsOrFn === "function") {
+        decorators = maybeDecoratorsOrFn(mainDecorators);
+      } else {
+        decorators = [...mainDecorators, ...maybeDecoratorsOrFn ?? []];
+      }
       const actionTarget = (actionResolversConfig[
         resolverActionName as keyof typeof actionResolversConfig
       ] as Function).prototype;
@@ -179,7 +201,8 @@ type RelationResolverActionNames<
 > = keyof typeof relationResolversMap[TModel]["prototype"];
 
 export type RelationResolverActionsConfig<TModel extends RelationResolverModelNames>
-  = Partial<Record<RelationResolverActionNames<TModel> | "_all", MethodDecorator[]>>;
+  = Partial<Record<RelationResolverActionNames<TModel>, MethodDecorator[] | MethodDecoratorOverrideFn>>
+  & { _all?: MethodDecorator[] };
 
 export type RelationResolversEnhanceMap = {
   [TModel in RelationResolverModelNames]?: RelationResolverActionsConfig<TModel>;
@@ -192,20 +215,18 @@ export function applyRelationResolversEnhanceMap(
     const modelName = relationResolversEnhanceMapKey as keyof typeof relationResolversEnhanceMap;
     const relationResolverTarget = relationResolversMap[modelName].prototype;
     const relationResolverActionsConfig = relationResolversEnhanceMap[modelName]!;
-    if (relationResolverActionsConfig._all) {
-      const allActionsDecorators = relationResolverActionsConfig._all;
-      const relationResolverActionNames = relationResolversInfo[modelName as keyof typeof relationResolversInfo];
-      for (const relationResolverActionName of relationResolverActionNames) {
-        tslib.__decorate(allActionsDecorators, relationResolverTarget, relationResolverActionName, null);
-      }
-    }
-    const relationResolverActionsToApply = Object.keys(relationResolverActionsConfig).filter(
-      it => it !== "_all"
-    );
-    for (const relationResolverActionName of relationResolverActionsToApply) {
-      const decorators = relationResolverActionsConfig[
+    const allActionsDecorators = relationResolverActionsConfig._all ?? [];
+    const relationResolverActionNames = relationResolversInfo[modelName as keyof typeof relationResolversInfo];
+    for (const relationResolverActionName of relationResolverActionNames) {
+      const maybeDecoratorsOrFn = relationResolverActionsConfig[
         relationResolverActionName as keyof typeof relationResolverActionsConfig
-      ] as MethodDecorator[];
+      ] as MethodDecorator[] | MethodDecoratorOverrideFn | undefined;
+      let decorators: MethodDecorator[];
+      if (typeof maybeDecoratorsOrFn === "function") {
+        decorators = maybeDecoratorsOrFn(allActionsDecorators);
+      } else {
+        decorators = [...allActionsDecorators, ...maybeDecoratorsOrFn ?? []];
+      }
       tslib.__decorate(decorators, relationResolverTarget, relationResolverActionName, null);
     }
   }
@@ -216,9 +237,11 @@ type TypeConfig = {
   fields?: FieldsConfig;
 };
 
+export type PropertyDecoratorOverrideFn = (decorators: PropertyDecorator[]) => PropertyDecorator[];
+
 type FieldsConfig<TTypeKeys extends string = string> = Partial<
-  Record<TTypeKeys | "_all", PropertyDecorator[]>
->;
+  Record<TTypeKeys, PropertyDecorator[] | PropertyDecoratorOverrideFn>
+> & { _all?: PropertyDecorator[] };
 
 function applyTypeClassEnhanceConfig<
   TEnhanceConfig extends TypeConfig,
@@ -233,18 +256,18 @@ function applyTypeClassEnhanceConfig<
     tslib.__decorate(enhanceConfig.class, typeClass);
   }
   if (enhanceConfig.fields) {
-    if (enhanceConfig.fields._all) {
-      const allFieldsDecorators = enhanceConfig.fields._all;
-      for (const typeFieldName of typeFieldNames) {
-        tslib.__decorate(allFieldsDecorators, typePrototype, typeFieldName, void 0);
+    const allFieldsDecorators = enhanceConfig.fields._all ?? [];
+    for (const typeFieldName of typeFieldNames) {
+      const maybeDecoratorsOrFn = enhanceConfig.fields[
+        typeFieldName
+      ] as PropertyDecorator[] | PropertyDecoratorOverrideFn | undefined;
+      let decorators: PropertyDecorator[];
+      if (typeof maybeDecoratorsOrFn === "function") {
+        decorators = maybeDecoratorsOrFn(allFieldsDecorators);
+      } else {
+        decorators = [...allFieldsDecorators, ...maybeDecoratorsOrFn ?? []];
       }
-    }
-    const configFieldsToApply = Object.keys(enhanceConfig.fields).filter(
-      it => it !== "_all"
-    );
-    for (const typeFieldName of configFieldsToApply) {
-      const fieldDecorators = enhanceConfig.fields[typeFieldName]!;
-      tslib.__decorate(fieldDecorators, typePrototype, typeFieldName, void 0);
+      tslib.__decorate(decorators, typePrototype, typeFieldName, void 0);
     }
   }
 }
@@ -301,7 +324,11 @@ const outputsInfo = {
   UserMaxAggregate: ["id", "email", "name"],
   PostCountAggregate: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "_all"],
   PostMinAggregate: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
-  PostMaxAggregate: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"]
+  PostMaxAggregate: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
+  CreateManyAndReturnUser: ["id", "email", "name"],
+  UpdateManyAndReturnUser: ["id", "email", "name"],
+  CreateManyAndReturnPost: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "author"],
+  UpdateManyAndReturnPost: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "author"]
 };
 
 type OutputTypesNames = keyof typeof outputTypes;
@@ -344,23 +371,26 @@ export function applyOutputTypesEnhanceMap(
 const inputsInfo = {
   UserWhereInput: ["AND", "OR", "NOT", "id", "email", "name", "posts"],
   UserOrderByWithRelationInput: ["id", "email", "name", "posts"],
-  UserWhereUniqueInput: ["id", "email"],
+  UserWhereUniqueInput: ["id", "email", "AND", "OR", "NOT", "name", "posts"],
   UserOrderByWithAggregationInput: ["id", "email", "name", "_count", "_max", "_min"],
   UserScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "email", "name"],
-  PostWhereInput: ["AND", "OR", "NOT", "id", "createdAt", "updatedAt", "published", "title", "content", "author", "authorId"],
-  PostOrderByWithRelationInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "author", "authorId"],
-  PostWhereUniqueInput: ["id"],
+  PostWhereInput: ["AND", "OR", "NOT", "id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "author"],
+  PostOrderByWithRelationInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "author"],
+  PostWhereUniqueInput: ["id", "AND", "OR", "NOT", "createdAt", "updatedAt", "published", "title", "content", "authorId", "author"],
   PostOrderByWithAggregationInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId", "_count", "_max", "_min"],
   PostScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   UserCreateInput: ["id", "email", "name", "posts"],
   UserUpdateInput: ["id", "email", "name", "posts"],
+  UserCreateManyInput: ["id", "email", "name"],
   UserUpdateManyMutationInput: ["id", "email", "name"],
   PostCreateInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "author"],
   PostUpdateInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "author"],
+  PostCreateManyInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   PostUpdateManyMutationInput: ["id", "createdAt", "updatedAt", "published", "title", "content"],
   StringFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
   StringNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
   PostListRelationFilter: ["every", "some", "none"],
+  SortOrderInput: ["sort", "nulls"],
   PostOrderByRelationAggregateInput: ["_count"],
   UserCountOrderByAggregateInput: ["id", "email", "name"],
   UserMaxOrderByAggregateInput: ["id", "email", "name"],
@@ -369,16 +399,16 @@ const inputsInfo = {
   StringNullableWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
   DateTimeFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
   BoolFilter: ["equals", "not"],
-  UserRelationFilter: ["is", "isNot"],
+  UserNullableScalarRelationFilter: ["is", "isNot"],
   PostCountOrderByAggregateInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   PostMaxOrderByAggregateInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   PostMinOrderByAggregateInput: ["id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   DateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
   BoolWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
-  PostCreateNestedManyWithoutAuthorInput: ["create", "connectOrCreate", "connect"],
+  PostCreateNestedManyWithoutAuthorInput: ["create", "connectOrCreate", "createMany", "connect"],
   StringFieldUpdateOperationsInput: ["set"],
   NullableStringFieldUpdateOperationsInput: ["set"],
-  PostUpdateManyWithoutAuthorNestedInput: ["create", "connectOrCreate", "upsert", "set", "disconnect", "delete", "connect", "update", "updateMany", "deleteMany"],
+  PostUpdateManyWithoutAuthorNestedInput: ["create", "connectOrCreate", "upsert", "createMany", "set", "disconnect", "delete", "connect", "update", "updateMany", "deleteMany"],
   UserCreateNestedOneWithoutPostsInput: ["create", "connectOrCreate", "connect"],
   DateTimeFieldUpdateOperationsInput: ["set"],
   BoolFieldUpdateOperationsInput: ["set"],
@@ -395,14 +425,17 @@ const inputsInfo = {
   NestedBoolWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
   PostCreateWithoutAuthorInput: ["id", "createdAt", "updatedAt", "published", "title", "content"],
   PostCreateOrConnectWithoutAuthorInput: ["where", "create"],
+  PostCreateManyAuthorInputEnvelope: ["data"],
   PostUpsertWithWhereUniqueWithoutAuthorInput: ["where", "update", "create"],
   PostUpdateWithWhereUniqueWithoutAuthorInput: ["where", "data"],
   PostUpdateManyWithWhereWithoutAuthorInput: ["where", "data"],
   PostScalarWhereInput: ["AND", "OR", "NOT", "id", "createdAt", "updatedAt", "published", "title", "content", "authorId"],
   UserCreateWithoutPostsInput: ["id", "email", "name"],
   UserCreateOrConnectWithoutPostsInput: ["where", "create"],
-  UserUpsertWithoutPostsInput: ["update", "create"],
+  UserUpsertWithoutPostsInput: ["update", "create", "where"],
+  UserUpdateToOneWithWhereWithoutPostsInput: ["where", "data"],
   UserUpdateWithoutPostsInput: ["id", "email", "name"],
+  PostCreateManyAuthorInput: ["id", "createdAt", "updatedAt", "published", "title", "content"],
   PostUpdateWithoutAuthorInput: ["id", "createdAt", "updatedAt", "published", "title", "content"]
 };
 

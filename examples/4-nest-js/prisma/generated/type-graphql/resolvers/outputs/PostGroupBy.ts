@@ -1,14 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { PostCountAggregate } from "../outputs/PostCountAggregate";
 import { PostMaxAggregate } from "../outputs/PostMaxAggregate";
 import { PostMinAggregate } from "../outputs/PostMinAggregate";
 
-@TypeGraphQL.ObjectType("PostGroupBy", {
-  isAbstract: true
-})
+@TypeGraphQL.ObjectType("PostGroupBy", {})
 export class PostGroupBy {
   @TypeGraphQL.Field(_type => String, {
     nullable: false

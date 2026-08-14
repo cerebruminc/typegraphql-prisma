@@ -1,16 +1,14 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { Prisma } from "@prisma/client";
-import { DecimalJSScalar } from "../../scalars";
+import { Prisma } from "../../../prisma/client";
 import { UserCreateOrConnectWithoutPostsInput } from "../inputs/UserCreateOrConnectWithoutPostsInput";
 import { UserCreateWithoutPostsInput } from "../inputs/UserCreateWithoutPostsInput";
-import { UserUpdateWithoutPostsInput } from "../inputs/UserUpdateWithoutPostsInput";
+import { UserUpdateToOneWithWhereWithoutPostsInput } from "../inputs/UserUpdateToOneWithWhereWithoutPostsInput";
 import { UserUpsertWithoutPostsInput } from "../inputs/UserUpsertWithoutPostsInput";
+import { UserWhereInput } from "../inputs/UserWhereInput";
 import { UserWhereUniqueInput } from "../inputs/UserWhereUniqueInput";
 
-@TypeGraphQL.InputType("UserUpdateOneWithoutPostsNestedInput", {
-  isAbstract: true
-})
+@TypeGraphQL.InputType("UserUpdateOneWithoutPostsNestedInput", {})
 export class UserUpdateOneWithoutPostsNestedInput {
   @TypeGraphQL.Field(_type => UserCreateWithoutPostsInput, {
     nullable: true
@@ -27,23 +25,23 @@ export class UserUpdateOneWithoutPostsNestedInput {
   })
   upsert?: UserUpsertWithoutPostsInput | undefined;
 
-  @TypeGraphQL.Field(_type => Boolean, {
+  @TypeGraphQL.Field(_type => UserWhereInput, {
     nullable: true
   })
-  disconnect?: boolean | undefined;
+  disconnect?: UserWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => Boolean, {
+  @TypeGraphQL.Field(_type => UserWhereInput, {
     nullable: true
   })
-  delete?: boolean | undefined;
+  delete?: UserWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => UserWhereUniqueInput, {
     nullable: true
   })
   connect?: UserWhereUniqueInput | undefined;
 
-  @TypeGraphQL.Field(_type => UserUpdateWithoutPostsInput, {
+  @TypeGraphQL.Field(_type => UserUpdateToOneWithWhereWithoutPostsInput, {
     nullable: true
   })
-  update?: UserUpdateWithoutPostsInput | undefined;
+  update?: UserUpdateToOneWithWhereWithoutPostsInput | undefined;
 }

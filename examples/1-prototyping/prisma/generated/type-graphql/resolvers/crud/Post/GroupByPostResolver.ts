@@ -3,7 +3,7 @@ import type { GraphQLResolveInfo } from "graphql";
 import { GroupByPostArgs } from "./args/GroupByPostArgs";
 import { Post } from "../../../models/Post";
 import { PostGroupBy } from "../../outputs/PostGroupBy";
-import { transformInfoIntoPrismaArgs, getPrismaFromContext, transformCountFieldIntoSelectRelationsCount } from "../../../helpers";
+import { transformInfoIntoPrismaArgs, getPrismaFromContext } from "../../../helpers";
 
 @TypeGraphQL.Resolver(_of => Post)
 export class GroupByPostResolver {
