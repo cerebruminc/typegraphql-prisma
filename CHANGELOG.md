@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/cerebruminc/typegraphql-prisma/compare/v1.0.0...v1.0.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* **examples:** migrate examples to Prisma 7 ([bf5346c](https://github.com/cerebruminc/typegraphql-prisma/commit/bf5346c84239ca3e89fadb88aa54db5513f1db5c))
+
 ## [1.0.0](https://github.com/cerebruminc/typegraphql-prisma/compare/v0.29.0...v1.0.0) (2026-08-14)
 
 
