@@ -40,6 +40,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+      id-token: write
 
     steps:
       - name: Checkout released commit
@@ -50,8 +51,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: npm
+          node-version: "24"
+          package-manager-cache: false
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
@@ -65,5 +66,3 @@ jobs:
 
       - name: Publish package
         run: npm run package:publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.CEREBRUM_PUBLISH_NPM_TOKEN }}

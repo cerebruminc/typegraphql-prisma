@@ -5,11 +5,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  issues: write
-  pull-requests: write
-
 concurrency:
   group: publish-beta-${{ github.event.pull_request.number }}
   cancel-in-progress: false
@@ -21,6 +16,11 @@ jobs:
       github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -29,8 +29,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: npm
+          node-version: "24"
+          package-manager-cache: false
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
@@ -54,8 +54,6 @@ jobs:
 
       - name: Publish beta package
         run: npm run package:publish -- --tag beta
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.CEREBRUM_PUBLISH_NPM_TOKEN }}
 
       - name: Find beta package comment
         uses: peter-evans/find-comment@v4
