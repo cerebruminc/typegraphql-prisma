@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/cerebruminc/typegraphql-prisma/compare/v1.0.1...v1.0.2) (2026-09-25)
+
+
+### Continuous Integration
+
+* **npm:** publish packages with GitHub OIDC ([b087efe](https://github.com/cerebruminc/typegraphql-prisma/commit/b087efeb445b95ccdcf7e944aeafc99327e07633))
+
 ## [1.0.1](https://github.com/cerebruminc/typegraphql-prisma/compare/v1.0.0...v1.0.1) (2026-08-18)
 
 
